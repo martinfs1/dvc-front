@@ -4,14 +4,17 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 //componentes
 import Login from './components/Login'
+import FormSeller from './pages/FormSeller';
 
 function App() {
 
-  console.log(process.env.REACT_APP_BACKEND_URL)
-
   return (
     <Router>
-      <Route path="/" component={Login} />
+      <Switch>
+        <Route path="/" component={Login} />
+        <Route path="/seller" component={FormSeller} />
+      </Switch>
+
     </Router>
   );
 }
