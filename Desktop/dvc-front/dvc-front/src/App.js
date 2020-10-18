@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import clienteAxios from './config/axios'
+
+
+//pages
+import SellerPage from './pages/SellerPage';
 
 //componentes
-import Login from './components/Login'
-import FormSeller from './pages/FormSeller';
+import Login from './components/Login';
 
 function App() {
 
   return (
     <Router>
       <Switch>
-        <Route path="/" component={Login} />
-        <Route path="/seller" component={FormSeller} />
+        <Route exact path="/seller" component={SellerPage} />
+        <Route exact path="/" component={Login} />
       </Switch>
 
     </Router>
