@@ -6,7 +6,7 @@ import './../css/Login.css'
 import auth from '../utils/auth'
 
 const Login = () => {
-  const [userName, setUserName] = useState('');
+  const [usuarioVendedor, setUsuarioVendedor] = useState('');
   const [password, setPassword] = useState('');
 
   const history = useHistory();
@@ -14,7 +14,7 @@ const Login = () => {
   const logUser = e => {
     e.preventDefault();
 
-    clienteAxios.post('/api/v1/usuarios/login', { userName, password })
+    clienteAxios.post('/api/v1/seller/login', { usuarioVendedor, password })
       .then(response => {
         auth.logedIn(response.data.token, response.data.role, response.data.id);
         Swal.fire({
@@ -23,11 +23,10 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1000
         });
-
         response.data.role === 'admin' ?
           history.push('/admin/todas')
           :
-          history.push('/')
+          history.push('/seller')
       }).catch(function () {
         Swal.fire({
           icon: "error",
@@ -56,12 +55,12 @@ const Login = () => {
             <input type="text"
               className="form-control"
               type="text"
-              name='userName'
+              name='usuarioVendedor'
               maxLength='10'
               placeholder="Usuario"
               minLength="4"
               autoFocus
-              onChange={(e) => { setUserName(e.target.value) }}
+              onChange={(e) => { setUsuarioVendedor(e.target.value) }}
             />
           </div>
         </div>
@@ -72,7 +71,7 @@ const Login = () => {
               className="form-control"
               id="inputPassword"
               name="password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Contraseña"
               onChange={(e) => { setPassword(e.target.value) }}
             />
