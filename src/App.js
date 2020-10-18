@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 //componentes
 import Navbar from './components/Navbar';
 import Login from './components/Login'
-import Tabla from './components/Tabla';
+import Panel from './components/Panel';
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Route component={Navbar} />
       <Switch>
-        <Route path="/tabla" exact={true} component={Tabla} />
+        <Route path="/panel" exact={true} component={Panel} />
         <Route path="/" exact={true} component={Login} />
       </Switch>
     </Router>

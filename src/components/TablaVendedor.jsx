@@ -16,7 +16,7 @@ export default function Tabla() {
 
     return (
         <div className="my-5 container">
-
+            <h2>Vendedores</h2>
                 <table className="table table-hover table-borderer" ref={tabla}>
                     <thead>
                         <tr className="border-info">
