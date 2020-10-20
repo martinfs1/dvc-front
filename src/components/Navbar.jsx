@@ -1,14 +1,28 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import '../css/Header.css'
+import '../css/Header.css';
+import auth from '../utils/auth';
+import clienteAxios from '../config/axios';
 
 export default function Administracion() {
 
     const isLogedIn = false;
     const history = useHistory();
 
-    const pathHome = history.location.pathname
-    console.log(pathHome);
+    const pathHome = history.location.pathname;
+
+    const LogUotHandler = async () => {
+        try {
+            await clienteAxios.get(`/api/v1/admin/logout`);
+            auth.logOut();
+            window.location = '/';
+        } catch (e) {
+            const { response } = e;
+            if (response.data.error & response.data.error.includes('expired')) {
+                console.log('La sesión finalizó');
+            }
+        }
+    }
     
     return (
         <>
@@ -21,7 +35,7 @@ export default function Administracion() {
                             {isLogedIn ?
                                 <button className="btn btn-light px-2">Mi Cuenta</button>
                                 :
-                                <button className="btn btn-light px-2">Iniciar Sesión</button>
+                                <button className="btn btn-light px-2" onClick={LogUotHandler}>Cerrar Sesión</button>
                             }
                         </li>
                     </ul>

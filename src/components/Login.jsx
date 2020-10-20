@@ -6,7 +6,7 @@ import './../css/Login.css'
 import auth from '../utils/auth'
 
 const Login = () => {
-  const [usuarioVendedor, setUsuarioVendedor] = useState('');
+  const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
   const history = useHistory();
@@ -14,7 +14,7 @@ const Login = () => {
   const logUser = e => {
     e.preventDefault();
 
-    clienteAxios.post('/api/v1/seller/login', { usuarioVendedor, password })
+    clienteAxios.post('/api/v1/login/', { user, password })
       .then(response => {
         auth.logedIn(response.data.token, response.data.role, response.data.id);
         Swal.fire({
@@ -24,10 +24,12 @@ const Login = () => {
           timer: 1000
         });
         response.data.role === 'admin' ?
-          history.push('/admin/todas')
+          history.push('/panel')
           :
           history.push('/seller')
-      }).catch(function () {
+      }).catch(function (error) {
+        const { response } = error
+        console.log(response);
         Swal.fire({
           icon: "error",
           title: "Credenciales incorrectas",
@@ -55,12 +57,12 @@ const Login = () => {
             <input type="text"
               className="form-control"
               type="text"
-              name='usuarioVendedor'
+              name='user'
               maxLength='10'
               placeholder="Usuario"
               minLength="4"
               autoFocus
-              onChange={(e) => { setUsuarioVendedor(e.target.value) }}
+              onChange={(e) => { setUser(e.target.value) }}
             />
           </div>
         </div>
