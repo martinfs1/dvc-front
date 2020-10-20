@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import clienteAxios from '../config/axios';
@@ -6,7 +6,7 @@ import './../css/Login.css'
 import auth from '../utils/auth'
 
 const Login = () => {
-  const [usuarioVendedor, setUsuarioVendedor] = useState('');
+  const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
   const history = useHistory();
@@ -14,7 +14,7 @@ const Login = () => {
   const logUser = e => {
     e.preventDefault();
 
-    clienteAxios.post('/api/v1/seller/login', { usuarioVendedor, password })
+    clienteAxios.post('/api/v1/login', { user, password })
       .then(response => {
         auth.logedIn(response.data.token, response.data.role, response.data.id);
         Swal.fire({
@@ -24,7 +24,7 @@ const Login = () => {
           timer: 1000
         });
         response.data.role === 'admin' ?
-          history.push('/admin/todas')
+          history.push('/')
           :
           history.push('/seller')
       }).catch(function () {
@@ -48,7 +48,7 @@ const Login = () => {
           Protegido: Sistema de Ventas</h1>
       </div>
 
-      <form className=' p-4 form' onSubmit={logUser}>
+      <form className='p-4 form' onSubmit={logUser}>
         <p className='text-center mt-3'>Este contenido está protegido. Para ingresar, por favor, introduce tu usuario y contraseña a continuación:</p>
         <div className="form-group row justify-content-center">
           <div className="col-sm-6">
@@ -60,7 +60,7 @@ const Login = () => {
               placeholder="Usuario"
               minLength="4"
               autoFocus
-              onChange={(e) => { setUsuarioVendedor(e.target.value) }}
+              onChange={(e) => { setUser(e.target.value) }}
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ const Login = () => {
               className="form-control"
               id="inputPassword"
               name="password"
-              // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}
               placeholder="Contraseña"
               onChange={(e) => { setPassword(e.target.value) }}
             />
