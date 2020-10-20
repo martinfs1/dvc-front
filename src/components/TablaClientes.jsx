@@ -39,6 +39,18 @@ export default function Tabla(props) {
             id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
         })
     }, {
+        dataField: 'dniClient',
+        text: 'DNI',
+        headerClasses: 'text-center table-dark', 
+        filter: textFilter({
+            placeholder: 'DNI...',  // custom the input placeholder
+            className: 'py-0', // custom classname on input
+            defaultValue: '', // default filtering value
+            delay: 500, // how long will trigger filtering after user typing, default is 500 ms
+            // getFilter: (f) => { ... }, // accept callback function and you can call it for filter programmtically
+            id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+        })
+    }, {
         dataField: 'celphoneClient',
         text: 'Teléfono',
         headerClasses: 'text-center table-dark',
