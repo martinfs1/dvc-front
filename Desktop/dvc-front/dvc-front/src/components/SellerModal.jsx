@@ -157,7 +157,6 @@ const SellerModal = () => {
                     type="file"
                     name="myFiles"
                     onChange={actualizarState}
-
                   />
 
                 </div>
