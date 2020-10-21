@@ -1,5 +1,24 @@
 .form{
   background-color: #f5efe0;
-  height: 18em;
+  height: 20em;
 
+}
+
+.sellerForm {
+  background-color: #f5efe0;
+
+}
+.fecha-alta {  
+  font-weight: bold;
+  font-size: 0.8rem;
+    }
+.contacto p {
+  font-size: 1.2rem;
+  margin: 0;
+  }
+/* .list-group-item:hover {
+  background: white;
+  } */
+form {
+border-radius: 1rem;
 }
