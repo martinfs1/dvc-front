@@ -3,6 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter, Comparator } from 'react-bootstrap-table2-filter';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 // import '../css/Panel.css';
 
 export default function Tabla(props) {
@@ -26,6 +27,19 @@ export default function Tabla(props) {
     const products = datos;
     const columns = [
     {
+        dataField: 'date',
+        text: 'Día',
+        headerClasses: 'text-center table-dark',
+        short: true,
+        filter: textFilter({
+            placeholder: 'Fecha...',  // custom the input placeholder
+            className: 'py-0', // custom classname on input
+            defaultValue: '', // default filtering value
+            delay: 500, // how long will trigger filtering after user typing, default is 500 ms
+            // getFilter: (f) => { ... }, // accept callback function and you can call it for filter programmtically
+            id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+        })
+    }, {
         dataField: 'nameClient',
         text: 'Nombre Completo',
         headerClasses: 'text-center table-dark',
@@ -54,10 +68,26 @@ export default function Tabla(props) {
         dataField: 'celphoneClient',
         text: 'Teléfono',
         headerClasses: 'text-center table-dark',
+        filter: textFilter({
+            placeholder: 'Teléfono...',  // custom the input placeholder
+            className: 'py-0', // custom classname on input
+            defaultValue: '', // default filtering value
+            delay: 500, // how long will trigger filtering after user typing, default is 500 ms
+            // getFilter: (f) => { ... }, // accept callback function and you can call it for filter programmtically
+            id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+        })
     }, {
         dataField: 'amountApproved',
         text: 'Crédito',
         headerClasses: 'text-center table-dark',
+        filter: textFilter({
+            placeholder: 'Crédito...',  // custom the input placeholder
+            className: 'py-0', // custom classname on input
+            defaultValue: '', // default filtering value
+            delay: 500, // how long will trigger filtering after user typing, default is 500 ms
+            // getFilter: (f) => { ... }, // accept callback function and you can call it for filter programmtically
+            id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+        })
 
     }, {
         dataField: 'feeAmount',
@@ -68,7 +98,7 @@ export default function Tabla(props) {
         text: 'Monto Cuotas',
         headerClasses: 'text-center table-dark',
     }, , {
-        dataField: '',
+        dataField: `<i className="fas fa-edit text-primary mx-1"></i><i className="far fa-trash-alt text-danger mx-1"></i>`,
         text: 'Acción',
         headerClasses: 'text-center table-dark',
     },

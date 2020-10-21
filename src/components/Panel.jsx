@@ -40,7 +40,7 @@ export default function Panel() {
                 </select>
 
             </div>
-            <div className="border border-dark tableWrap">
+            <div className="border border-dark">
                 { tablasChange ?
                     <TablaCliente datos={userDatos} />
                     :
