@@ -8,22 +8,7 @@ const SellerPage = () => {
 
 
   const [sales, setSales] = useState([])
-  // const [amountApproved, celphoneClient, creditLine, date, dniClient, enable, sellerName] = sale;
   console.log(sales)
-
-  // useEffect(() => {
-  //   const consultarApi = async () => {
-  //     await clienteAxios.get('api/v1/seller/allsales')
-  //       .then(res => {
-  //         console.log(res.data)
-  //         setSales(res.data);
-  //       })
-  //       .catch(error => {
-  //         console.log(error)
-  //       })
-  //   }
-  //   consultarApi();
-  // }, []);
 
   const getDatos = async (req, res) => {
     try {
@@ -38,12 +23,10 @@ const SellerPage = () => {
     getDatos()
   }, []);
 
-  // const sellers = sales.map(s => console.log(s));
-
   const ventas = sales.map(sale =>
-    <Link className="p-3 list-group-item list-group-item-action flex-column align-items-start">
+    <Link className="p-4 list-group-item list-group-item-action flex-column align-items-start saleCard">
       <div className="d-flex w-100 justify-content-between mb-4" >
-        <h4 className="mb-2 ">{sale.nameClient}</h4>
+        <h4 className="mb-0 ">{sale.nameClient}</h4>
         <small className="fecha-alta">
           {sale.date}
         </small>
@@ -53,6 +36,10 @@ const SellerPage = () => {
         <p>Numero Celular: {sale.celphoneClient}</p>
         <p>Tipo de Operación: {sale.typeOperation}</p>
         <p>Linea Crédito: {sale.creditLine}</p>
+        <p>Monto aprobado: {sale.amountApproved}</p>
+        <p>Cantidad de cuotas: {sale.feeAmount}</p>
+        <p>Monto de la cuota Crédito: {sale.quotaAmount}</p>
+        <p>Detalles de la Operación: {sale.saleDetail}</p>
       </div>
     </Link>
   );
@@ -92,28 +79,12 @@ const SellerPage = () => {
         </nav>
       </div>
 
-      <h2 className="my-3 text-center display-4">Ventas</h2>
+      <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
       <div className="container mt-2 py-5">
         <div className="row">
           <div className="col-md-8 mx-auto">
             <div className="list-group">
               {ventas}
-              {/* {sales.map(sale => (
-                <Link key={sale.index} className="p-3 list-group-item list-group-item-action flex-column align-items-start">
-                  <div className="d-flex w-100 justify-content-between mb-4" >
-                    <h4 className="mb-2 ">{sale.nameClient}</h4>
-                    <small className="fecha-alta">
-                      {sale.date}
-                    </small>
-                  </div>
-                  <div className="contacto py-3">
-                    <p>DNI: {sale.dniClient}</p>
-                    <p>Numero Celular: {sale.celphoneClient}</p>
-                    <p>Tipo de Operación: {sale.typeOperation}</p>
-                    <p>Linea Crédito: {sale.creditLine}</p>
-                  </div>
-                </Link>
-              ))} */}
             </div>
           </div>
 

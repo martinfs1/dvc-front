@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom';
 import clienteAxios from '../config/axios';
+import Swal from 'sweetalert2';
+
 
 const SellerModal = () => {
 
+  const history = useHistory();
   const [sellerForm, setSellerForm] = useState({
     sellerName: "",
     creditLine: "",
@@ -30,6 +34,14 @@ const SellerModal = () => {
     clienteAxios.post('api/v1/seller/formseller', sellerForm)
       .then(res => {
         console.log(res);
+        Swal.fire({
+          // position: 'top-end',
+          icon: 'success',
+          title: 'Tu venta se cargo correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        history.push('/seller')
       })
 
   }
@@ -54,16 +66,18 @@ const SellerModal = () => {
             <div className="">
               <h5 className="modal-title text-center" id="exampleModalLabel">Nueva Venta</h5>
             </div>
-            {/* <div className="form-group col-sm-6">
-              <label for="inputEmail4">Nombre del vendedor *</label>
-              <input className="form-control"
-                name="sellerName"
-                type="text"
-                onChange={actualizarState}
-              />
-            </div> */}
             <div className="modal-body">
               <form>
+
+                <div className="form-group col-sm-6">
+                  <label for="inputEmail4">Nombre del vendedor *</label>
+                  <input className="form-control"
+                    name="sellerName"
+                    type="text"
+                    onChange={actualizarState}
+                  />
+                </div>
+
                 <div className="form-row">
                   <div className="form-group col-sm-6">
                     <label for="inputState">Linea de Crédito *</label>
@@ -79,6 +93,16 @@ const SellerModal = () => {
                       <option >elegir...</option>
                       <option value="credito">Crédito</option>
                       <option value="electro">Electro</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group col-sm-6 ">
+                    <label for="inputState">Cliente Nuevo *</label>
+                    <select id="inputState" className="form-control" onChange={actualizarState} name="newClient">
+                      <option >elegir...</option>
+                      <option value={true}>Si</option>
+                      <option value={false}>No</option>
                     </select>
                   </div>
                 </div>
@@ -130,6 +154,8 @@ const SellerModal = () => {
                       <option value={12}>12</option>
                       <option value={15}>15</option>
                       <option value={18}>18</option>
+                      <option value={24}>24</option>
+                      <option value={30}>30</option>
                     </select>
                   </div>
                   <div className="form-group col-sm-6">

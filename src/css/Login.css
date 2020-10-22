@@ -1,3 +1,11 @@
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+   -webkit-appearance: none; margin: 0;
+   }
+ input[type=number] {
+    -moz-appearance:textfield;
+   }
+
 .form{
   background-color: #f5efe0;
   height: 20em;
@@ -21,4 +29,8 @@
   } */
 form {
 border-radius: 1rem;
+}
+.saleCard {
+  overflow: hidden;
+  /* height: 450px; */
 }
