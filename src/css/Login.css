@@ -31,6 +31,6 @@ form {
 border-radius: 1rem;
 }
 .saleCard {
-  overflow: hidden;
+  /* overflow: hidden; */
   /* height: 450px; */
 }

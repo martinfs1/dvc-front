@@ -39,6 +39,7 @@ const Login = () => {
       })
   }
 
+
   return (
     <div className="">
       <div className="text-center">
@@ -63,6 +64,7 @@ const Login = () => {
               minLength="4"
               autoFocus
               onChange={(e) => { setUser(e.target.value) }}
+              required
             />
           </div>
         </div>
@@ -76,6 +78,7 @@ const Login = () => {
               // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Contraseña"
               onChange={(e) => { setPassword(e.target.value) }}
+              required
             />
           </div>
         </div>

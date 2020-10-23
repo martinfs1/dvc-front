@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
+import auth from '../utils/auth'
 
 
 const SellerModal = () => {
@@ -31,11 +32,11 @@ const SellerModal = () => {
   const crearNuevaVenta = e => {
     e.preventDefault();
 
-    clienteAxios.post('api/v1/seller/formseller', sellerForm)
+    clienteAxios.post('api/v1/regsales', sellerForm)
       .then(res => {
+        auth.logedIn(res.data.token, res.data.role, res.data.id);
         console.log(res);
         Swal.fire({
-          // position: 'top-end',
           icon: 'success',
           title: 'Tu venta se cargo correctamente',
           showConfirmButton: false,
@@ -67,16 +68,7 @@ const SellerModal = () => {
               <h5 className="modal-title text-center" id="exampleModalLabel">Nueva Venta</h5>
             </div>
             <div className="modal-body">
-              <form>
-
-                <div className="form-group col-sm-6">
-                  <label for="inputEmail4">Nombre del vendedor *</label>
-                  <input className="form-control"
-                    name="sellerName"
-                    type="text"
-                    onChange={actualizarState}
-                  />
-                </div>
+              <form onSubmit={crearNuevaVenta}>
 
                 <div className="form-row">
                   <div className="form-group col-sm-6">
@@ -114,6 +106,7 @@ const SellerModal = () => {
                       name="nameClient"
                       type="text"
                       onChange={actualizarState}
+                      required
                     />
                   </div>
                   <div className="form-group col-sm-6">
@@ -122,6 +115,7 @@ const SellerModal = () => {
                       name="dniClient"
                       type="number"
                       onChange={actualizarState}
+                      required
                     />
                   </div>
                 </div>
@@ -132,6 +126,7 @@ const SellerModal = () => {
                       name="celphoneClient"
                       type="number"
                       onChange={actualizarState}
+                      required
                     />
                   </div>
                   <div className="form-group col-sm-6">
@@ -140,6 +135,7 @@ const SellerModal = () => {
                       name="amountApproved"
                       type="number"
                       onChange={actualizarState}
+                      required
                     />
                   </div>
                 </div>
@@ -164,6 +160,7 @@ const SellerModal = () => {
                       name="quotaAmount"
                       type="number"
                       onChange={actualizarState}
+                      required
                     />
                   </div>
                 </div>
@@ -183,20 +180,19 @@ const SellerModal = () => {
                     type="file"
                     name="myFiles"
                     onChange={actualizarState}
-
                   />
 
                 </div>
                 <p>(*) Campo Obligatorio</p>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary"
-                data-dismiss="modal"
-                type="button"
-              >Cerrar
+                <div className="modal-footer">
+                  <button className="btn btn-secondary"
+                    data-dismiss="modal"
+                    type="button"
+                  >Cerrar
               </button>
-              <button type="submit" onClick={crearNuevaVenta} className="btn btn-primary">Enviar</button>
+                  <button type="submit" className="btn btn-primary">Enviar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

@@ -8,12 +8,15 @@ const SellerPage = () => {
 
 
   const [sales, setSales] = useState([])
+
+
   console.log(sales)
 
   const getDatos = async (req, res) => {
     try {
-      const prueba = await clienteAxios.get('api/v1/seller/allsales');
+      const prueba = await clienteAxios.get('api/v1/getmonth');
       setSales(prueba.data);
+      console.log('prueba', prueba.data)
     } catch (error) {
       const { response } = error
     }
@@ -23,26 +26,48 @@ const SellerPage = () => {
     getDatos()
   }, []);
 
+
+  // const ventas = sales.map(sale =>
+  //   <Link key={sale._id} className="p-4 list-group-item list-group-item-action flex-column align-items-start saleCard">
+  //     <div className="d-flex w-100 justify-content-between mb-4" >
+  //       <h4 className="mb-0 ">{sale.nameClient}</h4>
+  //       <small className="fecha-alta">
+  //         {sale.date}
+  //       </small>
+  //     </div>
+  //     <div className="contacto py-3">
+  //       <p>DNI: {sale.dniClient}</p>
+  //       <p>Numero Celular: {sale.celphoneClient}</p>
+  //       <p>Tipo de Operación: {sale.typeOperation}</p>
+  //       <p>Linea Crédito: {sale.creditLine}</p>
+  //       <p>Monto aprobado: {sale.amountApproved}</p>
+  //       <p>Cantidad de cuotas: {sale.feeAmount}</p>
+  //       <p>Monto de la cuota: {sale.quotaAmount}</p>
+  //       <p>Detalles de la Operación: {sale.saleDetail}</p>
+  //       <p>Vendedor: {sale.sellerName}</p>
+  //     </div>
+  //   </Link>
+  // );
   const ventas = sales.map(sale =>
-    <Link className="p-4 list-group-item list-group-item-action flex-column align-items-start saleCard">
-      <div className="d-flex w-100 justify-content-between mb-4" >
-        <h4 className="mb-0 ">{sale.nameClient}</h4>
-        <small className="fecha-alta">
-          {sale.date}
-        </small>
-      </div>
-      <div className="contacto py-3">
-        <p>DNI: {sale.dniClient}</p>
-        <p>Numero Celular: {sale.celphoneClient}</p>
-        <p>Tipo de Operación: {sale.typeOperation}</p>
-        <p>Linea Crédito: {sale.creditLine}</p>
-        <p>Monto aprobado: {sale.amountApproved}</p>
-        <p>Cantidad de cuotas: {sale.feeAmount}</p>
-        <p>Monto de la cuota Crédito: {sale.quotaAmount}</p>
-        <p>Detalles de la Operación: {sale.saleDetail}</p>
+    <Link key={sale._id} >
+      <div className=" row my-5 card DivContainer">
+        <div className="d-flex w-100 justify-content-between mb-4" >
+          <h4 className="mb-0 ">{sale.nameClient}</h4>
+          <small className="fecha-alta">
+            {sale.date}
+          </small>
+        </div>
+        <div className="contacto py-3">
+          <p>DNI: {sale.dniClient}</p>
+          <p className="card-text" >Numero Celular: {sale.celphoneClient}</p>
+          <p className="card-text" >Tipo de Operación: {sale.typeOperation}</p>
+        </div>
       </div>
     </Link>
   );
+
+
+  console.log('ventas')
 
   return (
     <>
@@ -55,7 +80,7 @@ const SellerPage = () => {
           Protegido: Sistema de Ventas
         </h1>
         <nav className="navbar navbar-expand-md navbar-light bg-light">
-          <a className="navbar-brand" href="#">Nombre del Vendedor</a>
+          <a className="navbar-brand" href="#">{}</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -80,16 +105,10 @@ const SellerPage = () => {
       </div>
 
       <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
-      <div className="container mt-2 py-5">
-        <div className="row">
-          <div className="col-md-8 mx-auto">
-            <div className="list-group">
-              {ventas}
-            </div>
-          </div>
-
+      <div className="container" >
+        <div className="card-columns">
+          {ventas}
         </div>
-
       </div>
     </>
   );
