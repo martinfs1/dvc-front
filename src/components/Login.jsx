@@ -34,7 +34,7 @@ const Login = () => {
           icon: "error",
           title: "Credenciales incorrectas",
           showConfirmButton: false,
-          timer: 3000
+          timer: 1000
         });
       })
   }
