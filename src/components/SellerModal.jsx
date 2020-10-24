@@ -20,7 +20,7 @@ const SellerModal = () => {
     quotaAmount: "",
     feeAmount: "",
     saleDetail: "",
-    myFiles: ""
+    myFile: ""
   })
 
   const actualizarState = e => {
@@ -34,7 +34,7 @@ const SellerModal = () => {
 
     clienteAxios.post('api/v1/regsales', sellerForm)
       .then(res => {
-        auth.logedIn(res.data.token, res.data.role, res.data.id);
+        // auth.logedIn(res.data.token, res.data.role, res.data.id);
         console.log(res);
         Swal.fire({
           icon: 'success',
@@ -46,6 +46,23 @@ const SellerModal = () => {
       })
 
   }
+  const OnlyNumber = (event) => {
+    if (event.charCode <= 47) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Solo puede ingresar números'
+      });
+      return false
+    }
+    if (event.charCode >= 58) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Solo puede ingresar números',
+      });
+      return false
+    }
+  }
+
   return (
     <>
       <button
@@ -115,6 +132,7 @@ const SellerModal = () => {
                       name="dniClient"
                       type="number"
                       onChange={actualizarState}
+                      onKeyPress={OnlyNumber}
                       required
                     />
                   </div>
@@ -178,7 +196,7 @@ const SellerModal = () => {
                   <input className="form-control-file"
                     id="exampleFormControlFile1"
                     type="file"
-                    name="myFiles"
+                    name="myFile"
                     onChange={actualizarState}
                   />
 

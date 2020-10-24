@@ -8,7 +8,6 @@ import auth from '../utils/auth'
 const Login = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-
   const history = useHistory();
 
   const logUser = e => {
@@ -16,13 +15,14 @@ const Login = () => {
 
     clienteAxios.post('/api/v1/login/', { user, password })
       .then(response => {
-        auth.logedIn(response.data.token, response.data.role, response.data.id);
+        auth.logedIn(response.data.token, response.data.role, response.data.id, response.data.fullname);
         Swal.fire({
           icon: "success",
           title: "Logueado correctamente",
           showConfirmButton: false,
           timer: 1000
         });
+
         response.data.role === 'admin' ?
           history.push('/panel')
           :
@@ -38,7 +38,6 @@ const Login = () => {
         });
       })
   }
-
 
   return (
     <div className="">
