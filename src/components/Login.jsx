@@ -9,21 +9,22 @@ const Login = () => {
 
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-
   const history = useHistory();
+
 
   const logUser = e => {
     e.preventDefault();
 
     clienteAxios.post('/api/v1/login/', { user, password })
       .then(response => {
-        auth.logedIn(response.data.token);
+        auth.logedIn(response.data.token, response.data.fullname);
         Swal.fire({
           icon: "success",
           title: "Logueado correctamente",
           showConfirmButton: false,
           timer: 1000
         });
+
         response.data.role === 'admin' ?
           history.push('/panel')
           :
@@ -64,6 +65,7 @@ const Login = () => {
               minLength="4"
               autoFocus
               onChange={(e) => { setUser(e.target.value) }}
+              required
             />
           </div>
         </div>
@@ -77,6 +79,7 @@ const Login = () => {
               // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Contraseña"
               onChange={(e) => { setPassword(e.target.value) }}
+              required
             />
           </div>
         </div>

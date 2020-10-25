@@ -7,60 +7,68 @@ import { jwtData }from '../App';
 
 const SellerPage = () => {
 
-  const nombre = React.useContext(jwtData);
-
-  const [nombreSeller, setNombreSeller] = useState();
-
   const [sales, setSales] = useState([])
-  // const [amountApproved, celphoneClient, creditLine, date, dniClient, enable, sellerName] = sale;
-  console.log(sales)
-
-  // useEffect(() => {
-  //   const consultarApi = async () => {
-  //     await clienteAxios.get('api/v1/seller/allsales')
-  //       .then(res => {
-  //         console.log(res.data)
-  //         setSales(res.data);
-  //       })
-  //       .catch(error => {
-  //         console.log(error)
-  //       })
-  //   }
-  //   consultarApi();
-  // }, []);
+  const [saleShow, setSaleShow] = useState([])
+  const [sellerName, setSellerName] = useState("")
 
   const getDatos = async (req, res) => {
     try {
-      const prueba = await clienteAxios.get('api/v1/seller/allsales');
+      const prueba = await clienteAxios.get('api/v1/allsales');
       setSales(prueba.data);
+      setSaleShow(prueba.data);
+      console.log('prueba', prueba.data)
     } catch (error) {
       const { response } = error
     }
   }
 
+  let fecha = new Date()
+
+  const ventasMes = () => {
+    const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
+    let ventas = sales.filter(m => { return m.month.toLowerCase().includes(actual) });
+    setSaleShow(ventas);
+  }
+
   useEffect(() => {
-    getDatos();
-    setNombreSeller(nombre);
-  }, [nombre]);
+    setSellerName(localStorage.getItem('username'))
+    getDatos()
 
-  // const sellers = sales.map(s => console.log(s));
+  }, []);
 
-  const ventas = sales.map(sale =>
-    <Link className="p-3 list-group-item list-group-item-action flex-column align-items-start">
-      <div className="d-flex w-100 justify-content-between mb-4" >
-        <h4 className="mb-2 ">{sale.nameClient}</h4>
+  useEffect(() => {
+    ventasMes()
+  }, [sales])
+
+  const search = (e) => {
+
+    const dniSearch = sales.filter(sales => {
+      return sales.dniClient.toString().includes(e.target.value)
+
+    })
+    setSaleShow(dniSearch)
+  }
+
+  const ventas = saleShow.map(sale =>
+    <div key={sale._id} className="px-0 col-12 col-md-3 mx-1 my-4 card DivContainer justify-content-around saleCard  ">
+      <div className="card-header d-flex w-100 justify-content-between flex-wrap mb-4" >
+        <h5 className="mb-0">{sale.nameClient}</h5>
         <small className="fecha-alta">
           {sale.date}
         </small>
       </div>
-      <div className="contacto py-3">
-        <p>DNI: {sale.dniClient}</p>
-        <p>Numero Celular: {sale.celphoneClient}</p>
-        <p>Tipo de Operación: {sale.typeOperation}</p>
-        <p>Linea Crédito: {sale.creditLine}</p>
+      <div className="card-body contacto py-2">
+        <p className="card-text">DNI: {sale.dniClient}</p>
+        <p className="card-text">Numero Celular: {sale.celphoneClient}</p>
+        <p className="card-text">Tipo de Operación: {sale.typeOperation}</p>
+        <p className="card-text">Linea Crédito: {sale.creditLine}</p>
+        <p className="card-text">Monto aprobado: {sale.amountApproved}</p>
+        <p className="card-text">Cantidad de cuotas: {sale.feeAmount}</p>
+        <p className="card-text">Monto de la cuota: {sale.quotaAmount}</p>
+        <p className="card-text">Detalles de la Operación: {sale.saleDetail}</p>
       </div>
-    </Link>
-  );
+    </div>
+  ).reverse();
 
   return (
     <>
@@ -73,7 +81,7 @@ const SellerPage = () => {
           Protegido: Sistema de Ventas
         </h1>
         <nav className="navbar navbar-expand-md navbar-light bg-light">
-          <a className="navbar-brand" href="#">{nombreSeller ? nombreSeller : 'Nombre del Vendedor'}</a>
+          <a className="navbar-brand" href="#">{sellerName}</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -90,40 +98,18 @@ const SellerPage = () => {
                 placeholder="DNI Cliente"
                 aria-label="Search"
                 maxLength='8'
+                onChange={search}
               />
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
           </div>
         </nav>
       </div>
 
-      <h2 className="my-3 text-center display-4">Ventas</h2>
-      <div className="container mt-2 py-5">
-        <div className="row">
-          <div className="col-md-8 mx-auto">
-            <div className="list-group">
-              {ventas}
-              {/* {sales.map(sale => (
-                <Link key={sale.index} className="p-3 list-group-item list-group-item-action flex-column align-items-start">
-                  <div className="d-flex w-100 justify-content-between mb-4" >
-                    <h4 className="mb-2 ">{sale.nameClient}</h4>
-                    <small className="fecha-alta">
-                      {sale.date}
-                    </small>
-                  </div>
-                  <div className="contacto py-3">
-                    <p>DNI: {sale.dniClient}</p>
-                    <p>Numero Celular: {sale.celphoneClient}</p>
-                    <p>Tipo de Operación: {sale.typeOperation}</p>
-                    <p>Linea Crédito: {sale.creditLine}</p>
-                  </div>
-                </Link>
-              ))} */}
-            </div>
-          </div>
-
+      <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
+      <div className="container">
+        <div className="row justify-content-around">
+          {ventas}
         </div>
-
       </div>
     </>
   );

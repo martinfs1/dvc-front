@@ -18,32 +18,32 @@ export default function Administracion() {
             window.location = '/';
         } catch (e) {
             const { response } = e;
-            if (response.data.error & response.data.error.includes('expired')) {
+            if (response.data.error && response.data.error.includes('expired')) {
                 console.log('La sesión finalizó');
             }
         }
     }
-    
+
     return (
         <>
-        { pathHome !== '/' ?
-            <nav className="navbar">
-                <img className="img-fluid" src={require('../assets/marca-blanca.png')} width="100px" />
-                <div>
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item mx-2">
-                            {isLogedIn ?
-                                <button className="btn btn-light px-2">Mi Cuenta</button>
-                                :
-                                <button className="btn btn-light px-2" onClick={LogUotHandler}>Cerrar Sesión</button>
-                            }
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            :
-            ''
-        }
+            { pathHome !== '/' ?
+                <nav className="navbar">
+                    <img className="img-fluid" src={require('../assets/marca-blanca.png')} width="100px" />
+                    <div>
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item mx-2">
+                                {isLogedIn ?
+                                    <button className="btn btn-light px-2">Mi Cuenta</button>
+                                    :
+                                    <button className="btn btn-light px-2" onClick={LogUotHandler}>Cerrar Sesión</button>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                :
+                ''
+            }
         </>
     );
 }

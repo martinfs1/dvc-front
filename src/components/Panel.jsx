@@ -25,7 +25,7 @@ export default function Panel() {
         try {
             const sellers = await clienteAxios.get(`api/v1/allseller`);
             const clientes = await clienteAxios.get(`api/v1/allsales`);
-            
+
             //TablesSales
             setSellerDatos(sellers.data);
             setDatosSellerShow(sellers.data);
@@ -54,7 +54,7 @@ export default function Panel() {
         if (sortDatosAmount[0] === DatosShow[0])
         sortDatosAmount = [...userDatos].sort((b, a) => (b.amountApproved - a.amountApproved))
         setDatosShow(sortDatosAmount)
-    } 
+    }
 
     const sortDNI = () => {
         let sortdatos = [...userDatos].sort((a, b) => (b.dniClient - a.dniClient))
@@ -85,6 +85,10 @@ export default function Panel() {
         sortdatos = [...userDatos].sort(function(b, a){ 
             return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
         })
+        if (sortdatos[0] === DatosShow[0])
+            sortdatos = [...sortByDia].sort(function (b, a) {
+                return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
+            })
         setDatosShow(sortdatos);
     }
 
@@ -115,9 +119,9 @@ export default function Panel() {
 
     const deleteSaleHandler = async (props) => {
         try {
-            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, {enable: false});
+            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: false });
         } catch (error) {
-            const {response} = error;
+            const { response } = error;
             console.log(response);
         }
     }
@@ -154,7 +158,7 @@ export default function Panel() {
 
     const RowsSales = (props) => {
         const { datoFila } = props;
-        return(
+        return (
             <tr key={datoFila._id} id={datoFila._id}>
                 <th className="py-1" scope="row">{datoFila.date}</th>
                 <td className="py-1" colSpan="3">{datoFila.nameClient}</td>
@@ -171,7 +175,7 @@ export default function Panel() {
 
     const RowsSellers = (props) => {
         const { datoFila } = props;
-        return(
+        return (
             <tr key={datoFila._id} id={datoFila._id}>
                 <th className="py-1" colSpan="3" scope="row">{datoFila.fullname}</th>
                 <td className="py-1"></td>
@@ -183,11 +187,11 @@ export default function Panel() {
         )
     }
 
-    const filasSales = DatosShow.map(f => 
+    const filasSales = DatosShow.map(f =>
         <RowsSales datoFila={f} onClickHandler={onClickHandler} />
     );
 
-    const filasSellers = sellerDatos.map(f => 
+    const filasSellers = sellerDatos.map(f =>
         <RowsSellers datoFila={f} onClickHandler={onClickHandler} />
     );
 
@@ -202,7 +206,7 @@ export default function Panel() {
                 </select>
             </div>
             <div className="row justify-content-between px-3 my-3">
-                <input type="search" className="form-control col-12 col-md-7 w-100" onChange={search} placeholder="Buscar..."/>
+                <input type="search" className="form-control col-12 col-md-7 w-100" onChange={search} placeholder="Buscar..." />
                 {
                     tablasChange ? <button data-toggle="modal" data-target="#admin-Sale" className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2">Nueva Venta</button> 
                     :
@@ -214,15 +218,15 @@ export default function Panel() {
                 <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} />
                 {
                     tablasChange ?
-                    <>
-                        <DataTableSales datos={filasSales} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
-                        />
-                    </>
-                    :
-                    <>
-                        <DataTableSellers datos={filasSellers} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
-                        />
-                    </>
+                        <>
+                            <DataTableSales datos={filasSales} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
+                            />
+                        </>
+                        :
+                        <>
+                            <DataTableSellers datos={filasSellers} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
+                            />
+                        </>
                 }
             </div>
         </div>
