@@ -33,7 +33,7 @@ clienteAxios.interceptors.response.use(
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App token={localStorage.getItem('token')} />
   </React.StrictMode>,
   document.getElementById('root')
 );

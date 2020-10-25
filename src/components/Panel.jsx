@@ -4,24 +4,21 @@ import ModalEditSales from './ModalEditSales';
 import clienteAxios from '../config/axios';
 import DataTableSales from './DataTableSales';
 import DataTableSellers from './DataTableSellers';
+import AdminSaleModal from './AdminSaleModal';
 
 export default function Panel() {
 
     const [tablasChange, setTablasChange] = React.useState(true);
 
+    const [VentasDelMes, setVentasDelMes] = React.useState([]);
+
     // Tabla 
     const [sellerDatos, setSellerDatos] = React.useState([]);
     const [DatosSellerShow, setDatosSellerShow] = React.useState([]);
-    const [sortSellerByNombre, setSortSellerByNombre] = React.useState([]);
 
     // Tabla Ventas
     const [DatosShow, setDatosShow] = React.useState([]);
     const [userDatos, setUserDatos] = React.useState([]);
-    const [sortByAmount, setSortByAmount] = React.useState([]);
-    const [sortByDNI, setSortByDNI] = React.useState([]);
-    const [sortByNombre, setSortByNombre] = React.useState([]);
-    const [sortBySeller, setSortBySeller] = React.useState([]);
-    const [sortByDia, setSortByDia] = React.useState([]);
     const [fila, setFila] = React.useState({});
 
     const getDatos = async () => {
@@ -32,16 +29,10 @@ export default function Panel() {
             //TablesSales
             setSellerDatos(sellers.data);
             setDatosSellerShow(sellers.data);
-            setSortSellerByNombre(sellers.data);
 
             //TablesSales    
             setDatosShow(clientes.data);
             setUserDatos(clientes.data);
-            setSortByAmount(clientes.data);
-            setSortByDNI(clientes.data);
-            setSortByNombre(clientes.data);
-            setSortBySeller(clientes.data);
-            setSortByDia(clientes.data);
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -49,41 +40,49 @@ export default function Panel() {
     }
 
     // Sort's Table Sales
+    let fecha = new Date()
+
+    const ventasMes = () => {
+        const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric'});
+        // let ventas = userDatos.filter(item => item.month == actual);
+        let ventas = userDatos.filter(m => { return m.month.toLowerCase().includes(actual) });
+        setVentasDelMes(ventas);
+    }
 
     const sortAmount = () => {
-        let sortDatosAmount = [...sortByAmount].sort((a, b) => (b.amountApproved - a.amountApproved))
+        let sortDatosAmount = [...userDatos].sort((a, b) => (b.amountApproved - a.amountApproved))
         if (sortDatosAmount[0] === DatosShow[0])
-        sortDatosAmount = [...sortByAmount].sort((b, a) => (b.amountApproved - a.amountApproved))
+        sortDatosAmount = [...userDatos].sort((b, a) => (b.amountApproved - a.amountApproved))
         setDatosShow(sortDatosAmount)
     } 
 
     const sortDNI = () => {
-        let sortdatos = [...sortByDNI].sort((a, b) => (b.dniClient - a.dniClient))
+        let sortdatos = [...userDatos].sort((a, b) => (b.dniClient - a.dniClient))
         if (sortdatos[0] === DatosShow[0])
-        sortdatos = [...sortByDNI].sort((b, a) => (b.dniClient - a.dniClient))
+        sortdatos = [...userDatos].sort((b, a) => (b.dniClient - a.dniClient))
         setDatosShow(sortdatos);
     }
 
     const sortNombre = () => {
-        let sortdatos = [...sortByNombre].sort((a, b) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
+        let sortdatos = [...userDatos].sort((a, b) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
         if (sortdatos[0] === DatosShow[0])
-        sortdatos = [...sortByNombre].sort((b, a) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
+        sortdatos = [...userDatos].sort((b, a) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
         setDatosShow(sortdatos);
     }
 
     const sortNombreSeller = () => {
-        let sortdatos = [...sortBySeller].sort((a, b) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
+        let sortdatos = [...userDatos].sort((a, b) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
         if (sortdatos[0] === DatosShow[0])
-        sortdatos = [...sortBySeller].sort((b, a) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
+        sortdatos = [...userDatos].sort((b, a) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
         setDatosShow(sortdatos);
     }
 
     const sortDia = () => {
-        let sortdatos = [...sortByDia].sort(function(a, b){ 
+        let sortdatos = [...userDatos].sort(function(a, b){ 
             return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
         })
         if (sortdatos[0] === DatosShow[0]) 
-        sortdatos = [...sortByDia].sort(function(b, a){ 
+        sortdatos = [...userDatos].sort(function(b, a){ 
             return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
         })
         setDatosShow(sortdatos);
@@ -91,9 +90,9 @@ export default function Panel() {
 
     // Sort's Table Sellers
     const sortNombreS = () => {
-        let sortdatos = [...sortSellerByNombre].sort((a, b) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
-        if (sortdatos[0] === sellerDatos[0])
-        sortdatos = [...sortSellerByNombre].sort((b, a) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
+        let sortdatos = [...sellerDatos].sort((a, b) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
+        if (sortdatos[0] === DatosSellerShow[0])
+        sortdatos = [...sellerDatos].sort((b, a) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
         setDatosShow(sortdatos);
     }
 
@@ -101,6 +100,10 @@ export default function Panel() {
     React.useEffect(() => {
         getDatos();
     }, [fila]);
+
+    React.useEffect(() => {
+        ventasMes();
+    }, [DatosShow]);
 
     const onClickHandler = (datoFila) => {
         setFila(datoFila);
@@ -159,7 +162,7 @@ export default function Panel() {
                 <td className="py-1">{datoFila.celphoneClient}</td>
                 <td className="py-1" colSpan="3">{datoFila.sellerName}</td>
                 <td className="py-1">${datoFila.amountApproved}</td>
-                <td className="py-1"></td>
+                <td className="py-1">{datoFila.feeAmount}</td>
                 <td className="py-1">${datoFila.quotaAmount}</td>
                 <td className="py-1"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i role="button" tabindex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => deleteSaleHandler(datoFila)}></i></td>
             </tr>
@@ -188,10 +191,6 @@ export default function Panel() {
         <RowsSellers datoFila={f} onClickHandler={onClickHandler} />
     );
 
-    const AdminSale = () => {
-        console.log('venta');
-    }
-
     return (
         <div className="my-5 container">
             <div className="my-3 row justify-content-between px-3 form-group">
@@ -205,10 +204,13 @@ export default function Panel() {
             <div className="row justify-content-between px-3 my-3">
                 <input type="search" className="form-control col-12 col-md-7 w-100" onChange={search} placeholder="Buscar..."/>
                 {
-                    tablasChange && <button className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2" onClick={AdminSale}>Nueva Venta</button>
+                    tablasChange ? <button data-toggle="modal" data-target="#admin-Sale" className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2">Nueva Venta</button> 
+                    :
+                    <button className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2">Agregar Vendedor</button>
                 }
             </div>
             <div className="border border-dark tableWrap">
+                <AdminSaleModal datos={sellerDatos} />
                 <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} />
                 {
                     tablasChange ?

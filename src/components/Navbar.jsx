@@ -13,7 +13,7 @@ export default function Administracion() {
 
     const LogUotHandler = async () => {
         try {
-            await clienteAxios.get(`/api/v1/admin/logout`);
+            await clienteAxios.get(`/api/v1/logout`);
             auth.logOut();
             window.location = '/';
         } catch (e) {

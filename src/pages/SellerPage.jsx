@@ -3,9 +3,13 @@ import { Link } from "react-router-dom"
 import SellerModal from '../components/SellerModal'
 import './../css/Login.css'
 import clienteAxios from '../config/axios';
+import { jwtData }from '../App';
 
 const SellerPage = () => {
 
+  const nombre = React.useContext(jwtData);
+
+  const [nombreSeller, setNombreSeller] = useState();
 
   const [sales, setSales] = useState([])
   // const [amountApproved, celphoneClient, creditLine, date, dniClient, enable, sellerName] = sale;
@@ -35,8 +39,9 @@ const SellerPage = () => {
   }
 
   useEffect(() => {
-    getDatos()
-  }, []);
+    getDatos();
+    setNombreSeller(nombre);
+  }, [nombre]);
 
   // const sellers = sales.map(s => console.log(s));
 
@@ -68,7 +73,7 @@ const SellerPage = () => {
           Protegido: Sistema de Ventas
         </h1>
         <nav className="navbar navbar-expand-md navbar-light bg-light">
-          <a className="navbar-brand" href="#">Nombre del Vendedor</a>
+          <a className="navbar-brand" href="#">{nombreSeller ? nombreSeller : 'Nombre del Vendedor'}</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
