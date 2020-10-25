@@ -1,50 +1,58 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import React, { useState, useRef } from 'react'
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
-import auth from '../utils/auth'
-
 
 const SellerModal = () => {
 
-  const history = useHistory();
-  const [sellerForm, setSellerForm] = useState({
-    sellerName: "",
-    creditLine: "",
-    typeOperation: "",
-    newClient: false,
-    nameClient: "",
-    dniClient: "",
-    celphoneClient: "",
-    amountApproved: "",
-    quotaAmount: "",
-    feeAmount: "",
-    saleDetail: "",
-    myFile: ""
-  })
+  const [pdf, setPdf] = useState(null)
+  const [sellerForm, setSellerForm] = useState('')
+  const cerrarModal = useRef();
+  const resetForm = useRef();
 
   const actualizarState = e => {
     setSellerForm({
-      ...sellerForm,
-      [e.target.name]: e.target.value
+      ...sellerForm, [e.target.name]: e.target.value
     })
   }
-  const crearNuevaVenta = e => {
+  const crearNuevaVenta = async (e) => {
+
     e.preventDefault();
+    try {
 
-    clienteAxios.post('api/v1/regsales', sellerForm)
-      .then(res => {
-        // auth.logedIn(res.data.token, res.data.role, res.data.id);
-        console.log(res);
-        Swal.fire({
-          icon: 'success',
-          title: 'Tu venta se cargo correctamente',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        history.push('/seller')
+      const NewSales = await clienteAxios.post('api/v1/regsales', sellerForm)
+      console.log('newsales ->', NewSales.data.id)
+      const formData = new FormData()
+      formData.append('myFile', pdf)
+      await clienteAxios.post(`api/v1/regsales/${NewSales.data.id}/sendpdf`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
       })
+      Swal.fire({
+        icon: 'success',
+        title: 'Tu venta se cargo correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      resetForm.current.reset();
+      cerrarModal.current.click();
 
+
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  const upload = e => {
+    if (e.target.files[0].size <= 20000000) {
+      let file = e.target.files[0];
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+    } else {
+      e.target.value = ''
+      alert('subir algo min 2 mb')
+    }
   }
   const OnlyNumber = (event) => {
     if (event.charCode <= 47) {
@@ -73,7 +81,6 @@ const SellerModal = () => {
         data-whatever="@mdo">
         Nueva Venta
       </button>
-
       <div className="modal fade"
         id="exampleModal"
         tabIndex="-1"
@@ -82,24 +89,24 @@ const SellerModal = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="">
-              <h5 className="modal-title text-center" id="exampleModalLabel">Nueva Venta</h5>
+              <h5 className="modal-title text-center mt-3" id="exampleModalLabel">Nueva Venta</h5>
+              <hr />
             </div>
             <div className="modal-body">
-              <form onSubmit={crearNuevaVenta}>
-
+              <form onSubmit={crearNuevaVenta} ref={resetForm}>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputState">Linea de Crédito *</label>
-                    <select id="inputState" className="form-control" onChange={actualizarState} name="creditLine">
-                      <option >elegir...</option>
+                    <label for="inputStateCredito">Linea de Crédito *</label>
+                    <select id="inputStateCredito" className="form-control" onChange={actualizarState} name="creditLine">
+                      <option >Elegir...</option>
                       <option value="sencillo">Sencillo</option>
                       <option value="rapicredito">Rapicredito</option>
                     </select>
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="inputState">Indique tipo de operación *</label>
-                    <select id="inputState" className="form-control" onChange={actualizarState} name="typeOperation">
-                      <option >elegir...</option>
+                    <label for="inputStateOperacion">Indique tipo de operación *</label>
+                    <select id="inputStateOperacion" className="form-control" onChange={actualizarState} name="typeOperation">
+                      <option >Elegir...</option>
                       <option value="credito">Crédito</option>
                       <option value="electro">Electro</option>
                     </select>
@@ -107,19 +114,19 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6 ">
-                    <label for="inputState">Cliente Nuevo *</label>
-                    <select id="inputState" className="form-control" onChange={actualizarState} name="newClient">
-                      <option >elegir...</option>
+                    <label for="inputStateNew">Cliente Nuevo *</label>
+                    <select id="inputStateNew" className="form-control" onChange={actualizarState} name="newClient">
+                      <option >Elegir...</option>
                       <option value={true}>Si</option>
                       <option value={false}>No</option>
                     </select>
                   </div>
                 </div>
-
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputEmail4">Nombre del Cliente *</label>
+                    <label for="nombreCliente">Nombre del Cliente *</label>
                     <input className="form-control"
+                      id="nombreCliente"
                       name="nameClient"
                       type="text"
                       onChange={actualizarState}
@@ -127,31 +134,37 @@ const SellerModal = () => {
                     />
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="inputPassword4">DNI del Cliente *</label>
+                    <label for="dniCLiente">DNI del Cliente *</label>
                     <input className="form-control"
+                      id="dniCLiente"
                       name="dniClient"
-                      type="number"
-                      onChange={actualizarState}
+                      maxLength="8"
+                      type="text"
                       onKeyPress={OnlyNumber}
+                      onChange={actualizarState}
                       required
                     />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputAddress">Celular del Cliente *</label>
+                    <label for="celularCLiente">Celular del Cliente *</label>
                     <input className="form-control"
+                      id="celularCLiente"
                       name="celphoneClient"
-                      type="number"
+                      type="text"
+                      onKeyPress={OnlyNumber}
                       onChange={actualizarState}
                       required
                     />
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="inputAddress2">Monto Aprobado *</label>
+                    <label for="montoAprobado">Monto Aprobado *</label>
                     <input className="form-control"
+                      id="montoAprobado"
                       name="amountApproved"
-                      type="number"
+                      type="text"
+                      onKeyPress={OnlyNumber}
                       onChange={actualizarState}
                       required
                     />
@@ -159,9 +172,9 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputState">Cantidad de Cuotas *</label>
-                    <select id="inputState" className="form-control" onChange={actualizarState} name="feeAmount">
-                      <option value={0}>elegir...</option>
+                    <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
+                    <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="feeAmount">
+                      <option value={0}>Elegir...</option>
                       <option value={1}>0</option>
                       <option value={3}>3</option>
                       <option value={6}>6</option>
@@ -173,10 +186,12 @@ const SellerModal = () => {
                     </select>
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="inputZip">Monto por cuota *</label>
+                    <label for="montoPorCuota">Monto por cuota *</label>
                     <input className="form-control"
+                      id="montoPorCuota"
                       name="quotaAmount"
-                      type="number"
+                      type="text"
+                      onKeyPress={OnlyNumber}
                       onChange={actualizarState}
                       required
                     />
@@ -193,22 +208,34 @@ const SellerModal = () => {
                 </div>
                 <div className="form-group">
                   <label for="exampleFormControlFile1">Seleccionar Archivo PDF</label>
-                  <input className="form-control-file"
-                    id="exampleFormControlFile1"
+                  <input
                     type="file"
-                    name="myFile"
-                    onChange={actualizarState}
+                    className="form-control-file"
+                    name='myFile'
+                    onChange={e => {
+                      setPdf(e.target.files[0])
+                      let file = e.target.files
+                      if (file.length === 1) {
+                        upload(e)
+                      } else {
+                        e.target.value = ''
+                        alert('cargar pdf')
+                      }
+                    }}
                   />
-
                 </div>
                 <p>(*) Campo Obligatorio</p>
                 <div className="modal-footer">
                   <button className="btn btn-secondary"
                     data-dismiss="modal"
                     type="button"
+                    ref={cerrarModal}
                   >Cerrar
               </button>
-                  <button type="submit" className="btn btn-primary">Enviar</button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                  >Enviar</button>
                 </div>
               </form>
             </div>

@@ -7,17 +7,14 @@ import clienteAxios from '../config/axios';
 const SellerPage = () => {
 
   const [sales, setSales] = useState([])
+  const [saleShow, setSaleShow] = useState([])
   const [sellerName, setSellerName] = useState("")
-  const [salesMonth, setSalesMonth] = useState([])
-
-
-
-  console.log(sales)
 
   const getDatos = async (req, res) => {
     try {
       const prueba = await clienteAxios.get('api/v1/allsales');
       setSales(prueba.data);
+      setSaleShow(prueba.data);
       console.log('prueba', prueba.data)
     } catch (error) {
       const { response } = error
@@ -29,7 +26,7 @@ const SellerPage = () => {
   const ventasMes = () => {
     const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
     let ventas = sales.filter(m => { return m.month.toLowerCase().includes(actual) });
-    setSalesMonth(ventas);
+    setSaleShow(ventas);
   }
 
   useEffect(() => {
@@ -42,7 +39,16 @@ const SellerPage = () => {
     ventasMes()
   }, [sales])
 
-  const ventas = salesMonth.map(sale =>
+  const search = (e) => {
+
+    const dniSearch = sales.filter(sales => {
+      return sales.dniClient.toString().includes(e.target.value)
+
+    })
+    setSaleShow(dniSearch)
+  }
+
+  const ventas = saleShow.map(sale =>
     <div key={sale._id} className="px-0 col-12 col-md-3 mx-1 my-4 card DivContainer justify-content-around saleCard  ">
       <div className="card-header d-flex w-100 justify-content-between flex-wrap mb-4" >
         <h5 className="mb-0">{sale.nameClient}</h5>
@@ -62,8 +68,6 @@ const SellerPage = () => {
       </div>
     </div>
   ).reverse();
-
-  console.log('ventas')
 
   return (
     <>
@@ -93,8 +97,8 @@ const SellerPage = () => {
                 placeholder="DNI Cliente"
                 aria-label="Search"
                 maxLength='8'
+                onChange={search}
               />
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
           </div>
         </nav>
