@@ -5,147 +5,195 @@ import Swal from 'sweetalert2';
 const AdminSaleModal = (props) => {
 
     const { datos } = props;
-
     const [dataName, setDataName] = React.useState([]);
     const [options, setOptions] = React.useState([]);
-
-    const [sellerForm, setSellerForm] = React.useState({
-        sellerName: "",
-        creditLine: "",
-        typeOperation: "",
-        newClient: false,
-        nameClient: "",
-        dniClient: "",
-        celphoneClient: "",
-        amountApproved: "",
-        quotaAmount: "",
-        feeAmount: "",
-        saleDetail: "",
-        myFiles: ""
-    })
-
-    const actualizarState = e => {
-        setSellerForm({
-            ...sellerForm,
-            [e.target.name]: e.target.value
-        })
-    }
-    
-    const crearNuevaVenta = e => {
-        e.preventDefault();
-        try {
-            clienteAxios.post('api/v1/seller/formseller', sellerForm)
-        } catch (error) {
-            const { response } = error
-            console.log(error);
-        }
-    }
+    const [pdf, setPdf] = React.useState(null);
+    const [sellerForm, setSellerForm] = React.useState({});
+    const cerrarModal = React.useRef();
+    const resetForm = React.useRef();
 
     const optionsNameSellers = () => {
         let opciones = dataName.map(o => <option value={o.fullname}>{o.fullname}</option>)
         setOptions(opciones)
     }
-    
-    
+
     React.useEffect(() => {
         setDataName(datos);
     }, [datos]);
 
     React.useEffect(() => {
         optionsNameSellers()
-    }, [dataName])
+    }, [dataName]);
+
+
+    const actualizarState = e => {
+        setSellerForm({
+            ...sellerForm, [e.target.name]: e.target.value
+        });
+    }
+
+    const crearNuevaVenta = async (e) => {
+        e.preventDefault();
+        try {
+
+            const NewSales = await clienteAxios.post('api/v1/regsales', sellerForm)
+            console.log('newsales ->', NewSales.data.id)
+            const formData = new FormData()
+            formData.append('myFile', pdf)
+            await clienteAxios.post(`api/v1/regsales/${NewSales.data.id}/sendpdf`, formData, {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: 'Tu venta se cargo correctamente',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            resetForm.current.reset();
+            cerrarModal.current.click();
+
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const upload = e => {
+        if (e.target.files[0].size <= 20000000) {
+            let file = e.target.files[0];
+            let reader = new FileReader()
+            reader.readAsDataURL(file)
+        } else {
+            e.target.value = ''
+            alert('subir algo min 2 mb')
+        }
+    }
 
     const OnlyNumber = (event) => {
         if (event.charCode <= 47) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Solo puede ingresar números'
-          });
-          return false
+            Swal.fire({
+                icon: 'error',
+                title: 'Solo puede ingresar números'
+            });
+            return false
         }
         if (event.charCode >= 58) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Solo puede ingresar números',
-          });
-          return false
+            Swal.fire({
+                icon: 'error',
+                title: 'Solo puede ingresar números',
+            });
+            return false
         }
-      }
+    }
 
     return (
         <>
-            <div className="modal fade" id="admin-Sale" tabIndex="-1" aria-labelledby="admin-Sale" aria-hidden="true">
+            <div className="modal fade"
+                id="admin-sale"
+                tabIndex="-1"
+                aria-labelledby="admin-sales"
+                aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="">
-                            <h5 className="modal-title text-center mt-3" id="admin-Sale">Nueva Venta</h5>
-                            <hr/>
+                            <h5 className="modal-title text-center mt-3" id="admin-sales">Nueva Venta</h5>
+                            <hr />
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form onSubmit={crearNuevaVenta} ref={resetForm}>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="linea">Linea de Crédito *</label>
-                                        <select id="linea" className="form-control" onChange={actualizarState} name="creditLine">
-                                            <option selected disabled>Elegir...</option>
+                                        <label for="inputStateCredito">Linea de Crédito *</label>
+                                        <select id="inputStateCredito" className="form-control" onChange={actualizarState} name="creditLine">
+                                            <option >Elegir...</option>
                                             <option value="sencillo">Sencillo</option>
                                             <option value="rapicredito">Rapicredito</option>
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="operacion">Indique tipo de operación *</label>
-                                        <select id="operacion" className="form-control" onChange={actualizarState} name="typeOperation">
-                                            <option selected disabled>Elegir...</option>
+                                        <label for="inputStateOperacion">Indique tipo de operación *</label>
+                                        <select id="inputStateOperacion" className="form-control" onChange={actualizarState} name="typeOperation">
+                                            <option >Elegir...</option>
                                             <option value="credito">Crédito</option>
                                             <option value="electro">Electro</option>
                                         </select>
                                     </div>
                                 </div>
-
+                                <div className="form-row">
+                                    <div className="form-group col-sm-6 ">
+                                        <label for="inputStateNew">Cliente Nuevo *</label>
+                                        <select id="inputStateNew" className="form-control" onChange={actualizarState} name="newClient">
+                                            <option >Elegir...</option>
+                                            <option value={true}>Si</option>
+                                            <option value={false}>No</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group col-sm-6 ">
+                                        <label for="inputStateTypeClient">Tipo de Cliente *</label>
+                                        <select id="inputStateTypeClient" className="form-control" onChange={actualizarState} name="TypeClient">
+                                            <option >Elegir...</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="inputEmail4">Nombre del Cliente *</label>
+                                        <label for="nombreCliente">Nombre del Cliente *</label>
                                         <input className="form-control"
+                                            id="nombreCliente"
                                             name="nameClient"
                                             type="text"
                                             onChange={actualizarState}
+                                            required
                                         />
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="inputPassword4">DNI del Cliente *</label>
+                                        <label for="dniCLiente">DNI del Cliente *</label>
                                         <input className="form-control"
+                                            id="dniCLiente"
                                             name="dniClient"
-                                            type="number"
-                                            onKeyDown={OnlyNumber}
+                                            maxLength="8"
+                                            type="text"
+                                            onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
+                                            required
                                         />
                                     </div>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="inputAddress">Celular del Cliente *</label>
+                                        <label for="celularCLiente">Celular del Cliente *</label>
                                         <input className="form-control"
+                                            id="celularCLiente"
                                             name="celphoneClient"
-                                            type="number"
-                                            onKeyDown={OnlyNumber}
+                                            type="text"
+                                            onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
+                                            required
                                         />
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="inputAddress2">Monto Aprobado *</label>
+                                        <label for="montoAprobado">Monto Aprobado *</label>
                                         <input className="form-control"
+                                            id="montoAprobado"
                                             name="amountApproved"
-                                            type="number"
-                                            onKeyDown={OnlyNumber}
+                                            type="text"
+                                            onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
+                                            required
                                         />
                                     </div>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="inputState">Cantidad de Cuotas *</label>
-                                        <select id="inputState" className="form-control" onChange={actualizarState} name="quotaAmount">
-                                            <option selected disabled>Elegir...</option>
+                                        <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
+                                        <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
+                                            <option value={0}>Elegir...</option>
                                             <option value={1}>0</option>
                                             <option value={3}>3</option>
                                             <option value={6}>6</option>
@@ -157,17 +205,18 @@ const AdminSaleModal = (props) => {
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="cuota">Monto por cuota *</label>
+                                        <label for="montoPorCuota">Monto por cuota *</label>
                                         <input className="form-control"
-                                            id="cuota"
+                                            id="montoPorCuota"
                                             name="feeAmount"
-                                            type="number"
-                                            onKeyDown={OnlyNumber}
+                                            type="text"
+                                            onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
+                                            required
                                         />
                                     </div>
                                 </div>
-                                <div className="form-row">
+                                < div className = "form-row" >
                                     <div className="form-group">
                                         <label for="message-text" className="col-form-label">Detalles de la operación</label>
                                         <textarea className="form-control"
@@ -185,27 +234,40 @@ const AdminSaleModal = (props) => {
                                             {options}
                                         </select>
                                     </div>
-                                </div>
+                                </div >
                                 <div className="form-group">
-                                    <label for="file">Seleccionar Archivo PDF</label>
-                                    <input className="form-control-file"
-                                        id="file"
+                                    <label for="exampleFormControlFile1">Seleccionar Archivo PDF</label>
+                                    <input
                                         type="file"
-                                        name="myFiles"
-                                        onChange={actualizarState}
+                                        className="form-control-file"
+                                        name='myFile'
+                                        onChange={e => {
+                                            setPdf(e.target.files[0])
+                                            let file = e.target.files
+                                            if (file.length === 1) {
+                                                upload(e)
+                                            } else {
+                                                e.target.value = ''
+                                                alert('cargar pdf')
+                                            }
+                                        }}
                                     />
-
                                 </div>
                                 <p>(*) Campo Obligatorio</p>
+                                <div className="modal-footer">
+                                    <button className="btn btn-secondary"
+                                        data-dismiss="modal"
+                                        type="button"
+                                        ref={cerrarModal}
+                                    >
+                                    Cerrar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                    >Enviar</button>
+                                </div>
                             </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-secondary"
-                                data-dismiss="modal"
-                                type="button"
-                            >Cerrar
-                            </button>
-                            <button type="submit" onClick={crearNuevaVenta} className="btn btn-primary">Enviar</button>
                         </div>
                     </div>
                 </div>
