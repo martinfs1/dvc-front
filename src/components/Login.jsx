@@ -18,6 +18,7 @@ const Login = () => {
     clienteAxios.post('/api/v1/login/', { user, password })
       .then(response => {
         auth.logedIn(response.data.token, response.data.fullname);
+        console.log(response.data);
         Swal.fire({
           icon: "success",
           title: "Logueado correctamente",

@@ -144,7 +144,7 @@ const AdminSaleModal = (props) => {
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
                                         <label for="inputState">Cantidad de Cuotas *</label>
-                                        <select id="inputState" className="form-control" onChange={actualizarState} name="feeAmount">
+                                        <select id="inputState" className="form-control" onChange={actualizarState} name="quotaAmount">
                                             <option selected disabled>Elegir...</option>
                                             <option value={1}>0</option>
                                             <option value={3}>3</option>
@@ -152,13 +152,15 @@ const AdminSaleModal = (props) => {
                                             <option value={12}>12</option>
                                             <option value={15}>15</option>
                                             <option value={18}>18</option>
+                                            <option value={24}>24</option>
+                                            <option value={30}>30</option>
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6">
                                         <label for="cuota">Monto por cuota *</label>
                                         <input className="form-control"
                                             id="cuota"
-                                            name="quotaAmount"
+                                            name="feeAmount"
                                             type="number"
                                             onKeyDown={OnlyNumber}
                                             onChange={actualizarState}

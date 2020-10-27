@@ -5,6 +5,7 @@ import clienteAxios from '../config/axios';
 import DataTableSales from './DataTableSales';
 import DataTableSellers from './DataTableSellers';
 import AdminSaleModal from './AdminSaleModal';
+import ModalRegAdminSeller from './ModalRegAdminSeller';
 
 export default function Panel() {
 
@@ -86,7 +87,7 @@ export default function Panel() {
             return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
         })
         if (sortdatos[0] === DatosShow[0])
-            sortdatos = [...sortByDia].sort(function (b, a) {
+            sortdatos = [...userDatos].sort(function (b, a) {
                 return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
             })
         setDatosShow(sortdatos);
@@ -160,15 +161,16 @@ export default function Panel() {
         const { datoFila } = props;
         return (
             <tr key={datoFila._id} id={datoFila._id}>
-                <th className="py-1" scope="row">{datoFila.date}</th>
-                <td className="py-1" colSpan="3">{datoFila.nameClient}</td>
-                <td className="py-1">{datoFila.dniClient}</td>
-                <td className="py-1">{datoFila.celphoneClient}</td>
-                <td className="py-1" colSpan="3">{datoFila.sellerName}</td>
-                <td className="py-1">${datoFila.amountApproved}</td>
-                <td className="py-1">{datoFila.feeAmount}</td>
-                <td className="py-1">${datoFila.quotaAmount}</td>
-                <td className="py-1"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i role="button" tabindex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => deleteSaleHandler(datoFila)}></i></td>
+                <th className="py-1 text-nowrap" scope="row">{datoFila.date}</th>
+                <td className="py-1 text-nowrap" colSpan="3">{datoFila.nameClient}</td>
+                <td className="py-1 text-nowrap">{datoFila.dniClient}</td>
+                <td className="py-1 text-nowrap">{datoFila.celphoneClient}</td>
+                <td className="py-1 text-nowrap" colSpan="3">{datoFila.sellerName}</td>
+                <td className="py-1 text-nowrap">${datoFila.amountApproved}</td>
+                <td className="py-1 text-nowrap">{datoFila.feeAmount}</td>
+                <td className="py-1 text-nowrap">${datoFila.quotaAmount}</td>
+                <td className="py-1 text-nowrap"></td>
+                <td className="py-1 text-nowrap"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i role="button" tabIndex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => deleteSaleHandler(datoFila)}></i></td>
             </tr>
         )
     }
@@ -177,12 +179,12 @@ export default function Panel() {
         const { datoFila } = props;
         return (
             <tr key={datoFila._id} id={datoFila._id}>
-                <th className="py-1" colSpan="3" scope="row">{datoFila.fullname}</th>
-                <td className="py-1"></td>
-                <td className="py-1">{datoFila.celphone}</td>
-                <td className="py-1" colSpan="3">{datoFila.email}</td>
-                <td className="py-1" ></td>
-                <td className="py-1"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i className="far fa-trash-alt text-danger mx-1"></i></td>
+                <th className="py-1 text-nowrap" colSpan="3" scope="row">{datoFila.fullname}</th>
+                <td className="py-1 text-nowrap"></td>
+                <td className="py-1 text-nowrap">{datoFila.celphone}</td>
+                <td className="py-1 text-nowrap" colSpan="3">{datoFila.email}</td>
+                <td className="py-1 text-nowrap" ></td>
+                <td className="py-1 text-nowrap"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i className="far fa-trash-alt text-danger mx-1"></i></td>
             </tr>
         )
     }
@@ -208,18 +210,19 @@ export default function Panel() {
             <div className="row justify-content-between px-3 my-3">
                 <input type="search" className="form-control col-12 col-md-7 w-100" onChange={search} placeholder="Buscar..." />
                 {
-                    tablasChange ? <button data-toggle="modal" data-target="#admin-Sale" className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2">Nueva Venta</button> 
+                    tablasChange ? <button data-toggle="modal" data-target="#admin-Sale" className="btn btn-secondary mt-3 mt-md-0 col-12 col-md-2">Nueva Venta</button> 
                     :
-                    <button className="btn btn-primary mt-3 mt-md-0 col-12 col-md-2">Agregar Vendedor</button>
+                    <button className="btn btn-secondary mt-3 mt-md-0 col-12 col-md-2">Agregar Vendedor</button>
                 }
             </div>
+            <ModalRegAdminSeller tablasChange={tablasChange} />
             <div className="border border-dark tableWrap">
                 <AdminSaleModal datos={sellerDatos} />
-                <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} />
+                <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} tablasChange={tablasChange} />
                 {
                     tablasChange ?
                         <>
-                            <DataTableSales datos={filasSales} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
+                            <DataTableSales datos={filasSales} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia} DatosShow={DatosShow}
                             />
                         </>
                         :
