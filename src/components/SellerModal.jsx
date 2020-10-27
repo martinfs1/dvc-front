@@ -182,7 +182,7 @@ const SellerModal = () => {
                 <div className="form-row">
                   <div className="form-group col-sm-6">
                     <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
-                    <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount" >
+                    <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
                       <option value={0}>Elegir...</option>
                       <option value={1}>0</option>
                       <option value={3}>3</option>
