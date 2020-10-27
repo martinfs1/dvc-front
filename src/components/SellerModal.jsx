@@ -121,6 +121,15 @@ const SellerModal = () => {
                       <option value={false}>No</option>
                     </select>
                   </div>
+                  <div className="form-group col-sm-6 ">
+                    <label for="inputStateTypeClient">Tipo de Cliente *</label>
+                    <select id="inputStateTypeClient" className="form-control" onChange={actualizarState} name="TypeClient">
+                      <option >Elegir...</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
