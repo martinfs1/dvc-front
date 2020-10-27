@@ -121,6 +121,15 @@ const SellerModal = () => {
                       <option value={false}>No</option>
                     </select>
                   </div>
+                  <div className="form-group col-sm-6 ">
+                    <label for="inputStateTypeClient">Tipo de Cliente *</label>
+                    <select id="inputStateTypeClient" className="form-control" onChange={actualizarState} name="TypeClient">
+                      <option >Elegir...</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
@@ -173,7 +182,7 @@ const SellerModal = () => {
                 <div className="form-row">
                   <div className="form-group col-sm-6">
                     <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
-                    <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="feeAmount">
+                    <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount" >
                       <option value={0}>Elegir...</option>
                       <option value={1}>0</option>
                       <option value={3}>3</option>
@@ -189,7 +198,7 @@ const SellerModal = () => {
                     <label for="montoPorCuota">Monto por cuota *</label>
                     <input className="form-control"
                       id="montoPorCuota"
-                      name="quotaAmount"
+                      name="feeAmount"
                       type="text"
                       onKeyPress={OnlyNumber}
                       onChange={actualizarState}
