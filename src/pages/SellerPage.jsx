@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from "react-router-dom"
 import SellerModal from '../components/SellerModal'
 import './../css/Login.css'
 import clienteAxios from '../config/axios';
-import { jwtData }from '../App';
+import { jwtData } from '../App';
 
 const SellerPage = () => {
 
   const [sales, setSales] = useState([])
   const [saleShow, setSaleShow] = useState([])
   const [sellerName, setSellerName] = useState("")
+  const [montoSales, setMontoSales] = useState()
 
   const getDatos = async (req, res) => {
     try {
       const prueba = await clienteAxios.get('api/v1/allsales');
+      // const monto = await clienteAxios.get('/api/v1/montosales');
       setSales(prueba.data);
       setSaleShow(prueba.data);
+      // setMontoSales(monto.data)
       console.log('prueba', prueba.data)
     } catch (error) {
-      const { response } = error
+      console.log(error)
     }
   }
 
@@ -101,13 +103,16 @@ const SellerPage = () => {
                 onChange={search}
               />
             </form>
+            {/* <div>
+              <span className="">Ventas Total del mes: $127.000</span>
+            </div> */}
           </div>
         </nav>
       </div>
 
-      <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
       <div className="container">
         <div className="row justify-content-around">
+          <h2 className="my-1 text-center display-4">Ventas del corriente mes: $524.000</h2>
           {ventas}
         </div>
       </div>
