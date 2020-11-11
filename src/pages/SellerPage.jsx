@@ -2,22 +2,18 @@ import React, { useState, useEffect } from 'react'
 import SellerModal from '../components/SellerModal'
 import './../css/Login.css'
 import clienteAxios from '../config/axios';
-import { jwtData } from '../App';
 
 const SellerPage = () => {
 
   const [sales, setSales] = useState([])
   const [saleShow, setSaleShow] = useState([])
   const [sellerName, setSellerName] = useState("")
-  const [montoSales, setMontoSales] = useState()
 
   const getDatos = async (req, res) => {
     try {
       const prueba = await clienteAxios.get('api/v1/allsales');
-      // const monto = await clienteAxios.get('/api/v1/montosales');
       setSales(prueba.data);
       setSaleShow(prueba.data);
-      // setMontoSales(monto.data)
       console.log('prueba', prueba.data)
     } catch (error) {
       console.log(error)
@@ -27,7 +23,7 @@ const SellerPage = () => {
   let fecha = new Date()
 
   const ventasMes = () => {
-    const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
+    const actual = fecha.toLocaleString('default', { month: '2-digit' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
     let ventas = sales.filter(m => { return m.month.toLowerCase().includes(actual) });
     setSaleShow(ventas);
   }
