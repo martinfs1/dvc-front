@@ -3,9 +3,7 @@ import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
 
-export default function RegSeller(props) {
-
-    const { datos, onChangeHandler, tablasChange } = props;
+export default function RegSeller({ datos, onChangeHandler, tablasChange, getDatos }) {
 
     const btnCerrar = React.useRef(null);
 
@@ -25,6 +23,7 @@ export default function RegSeller(props) {
                 })
                 editVentasHandler();
                 btnCerrar.current.click();
+                getDatos()
             } else if (result.isDenied) {
                 Swal.fire({
                     title: 'Cambios Descartados!',
@@ -36,7 +35,7 @@ export default function RegSeller(props) {
         })
     }
 
-    const editVentasHandler = async (req, res) => {
+    const editVentasHandler = async () => {
         try {
             await clienteAxios.put(`api/v1/salesupdate/${datos._id}`, datos)
         } catch (error) {
@@ -50,7 +49,7 @@ export default function RegSeller(props) {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title text-center" id="exampleModalLabel">Editar Venta</h5>
+                            <h5 className="modal-title text-center" id="exampleModalLabel">Editar Venta {datos.date}</h5>
                             <button type="button" ref={btnCerrar} className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -62,22 +61,22 @@ export default function RegSeller(props) {
                                         <>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="nombre">Nombre</label>
-                                                    <input type="text" id="nombre" className="form-control text-center" placeholder="Nombre Completo" name="nameClient" onChange={onChangeHandler} value={datos.nameClient} />
+                                                    <label htmlFor="nombrefull">Nombre</label>
+                                                    <input type="text" id="nombrefull" className="form-control text-center" placeholder="Nombre Completo" name="nameClient" onChange={onChangeHandler} value={datos.nameClient} />
                                                 </div>
                                                 <div className="col text-center">
-                                                    <label htmlFor="number">Número</label>
-                                                    <input type="text" id="number" className="form-control text-center" placeholder="Número de Teléfono" name="celphoneClient" onChange={onChangeHandler} value={datos.celphoneClient} />
+                                                    <label htmlFor="number">DNI</label>
+                                                    <input type="text" id="number" className="form-control text-center" placeholder="Número de Teléfono" name="dniClient" onChange={onChangeHandler} value={datos.dniClient} />
                                                 </div>
                                             </div>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="dia">Día</label>
-                                                    <input type="text" id="dia" className="form-control text-center" placeholder="Día" name="date" onChange={onChangeHandler} value={datos.date} />
+                                                    <label htmlFor="dia">Teléfono</label>
+                                                    <input type="text" id="dia" className="form-control text-center" placeholder="Día" name="celphoneClient" onChange={onChangeHandler} value={datos.celphoneClient} />
                                                 </div>
                                                 <div className="col text-center">
-                                                    <label htmlFor="cuotas">Cuotas</label>
-                                                    <input type="text" id="cuotas" className="form-control text-center" placeholder="Número de Cuotas" name="feeAmount" onChange={onChangeHandler} value={datos.feeAmount} />
+                                                    <label htmlFor="cuotas">Tipo Venta</label>
+                                                    <input type="text" id="cuotas" className="form-control text-center" placeholder="Número de Cuotas" name="creditLine" onChange={onChangeHandler} value={datos.creditLine} />
                                                 </div>
                                             </div>
                                             <div className="form-group row">
@@ -89,6 +88,27 @@ export default function RegSeller(props) {
                                                     <label htmlFor="mcuotas">Monto Cuotas</label>
                                                     <input type="text" id="mcuotas" className="form-control text-center" placeholder="Monto de Cuotas" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
                                                 </div>
+                                            </div>
+                                            <div className="form-group row">
+                                                <div className="col text-center">
+                                                    <label htmlFor="monto">N° Cuotas</label>
+                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
+                                                </div>
+                                                <div className="col text-center">
+                                                    <label htmlFor="monto">Time</label>
+                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="timeVenta" onChange={onChangeHandler} value={datos.timeVenta} />
+                                                </div>
+                                                <div className="col text-center">
+                                                    <label htmlFor="enable">Habilitado</label>
+                                                    <select className="custom-select" as="select" name="enable" onChange={onChangeHandler}>
+                                                        <option value="SI">SI</option>
+                                                        <option value="NO">NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="col-12 text-center">
+                                                <label htmlFor="saleDetail">Observación</label>
+                                                <textarea rows="1" type="text" id="saleDetail" className="form-control text-center" placeholder={`${datos.saleDetail ? 'Cambiar Observación' : 'No existe observación'}`} name="saleDetail" onChange={onChangeHandler} value={datos.saleDetail} />
                                             </div>
                                         </>
                                         :

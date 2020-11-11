@@ -1,44 +1,47 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from "react-router-dom"
 import SellerModal from '../components/SellerModal'
 import './../css/Login.css'
 import clienteAxios from '../config/axios';
-import { jwtData }from '../App';
 
 const SellerPage = () => {
 
-  const [sales, setSales] = useState([])
-  const [saleShow, setSaleShow] = useState([])
-  const [sellerName, setSellerName] = useState("")
+  const [sales, setSales] = useState([]);
+  const [saleShow, setSaleShow] = useState([]);
+  const [sellerName, setSellerName] = useState("");
+  const [nuevaVenta, setNuevaVenta] = useState(true)
 
-  const getDatos = async (req, res) => {
+  const fecha = new Date();
+
+  const getDatos = async () => {
     try {
       const prueba = await clienteAxios.get('api/v1/allsales');
       setSales(prueba.data);
-      setSaleShow(prueba.data);
-      console.log('prueba', prueba.data)
     } catch (error) {
-      const { response } = error
+      const { response } = error;
+      console.log(response);
     }
-  }
-
-  let fecha = new Date()
-
+  }  
+  
   const ventasMes = () => {
-    const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
+    const actual = fecha.toLocaleString('default', { month: '2-digit' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
     let ventas = sales.filter(m => { return m.month.toLowerCase().includes(actual) });
     setSaleShow(ventas);
   }
 
+  const funcNuevaVenta = () => {
+    setNuevaVenta(!nuevaVenta);
+  }
+
+  console.log(sales);
+  
   useEffect(() => {
     setSellerName(localStorage.getItem('username'))
-    getDatos()
-
-  }, []);
-
+    getDatos();
+  }, [nuevaVenta]);
+  
   useEffect(() => {
-    ventasMes()
-  }, [sales])
+    ventasMes();
+  }, [sales]);
 
   const search = (e) => {
 
@@ -89,7 +92,7 @@ const SellerPage = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item">
-                <SellerModal />
+                <SellerModal funcNuevaVenta={funcNuevaVenta} />
               </li>
             </ul>
             <form className="form-inline my-2 my-sm-0">
