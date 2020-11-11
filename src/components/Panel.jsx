@@ -28,7 +28,7 @@ export default function Panel() {
     const [limit, setLimit] = React.useState(20);
     const [page, setPage] = React.useState(1);
     const [datosRows, setDatosRows] = React.useState([]);
-    const [params, setParams] = React.useState({})
+    const [params, setParams] = React.useState({ enable: 'SI' })
 
 
     const getDatos = async () => {
@@ -41,7 +41,8 @@ export default function Panel() {
                     ...params
                 }
             })
-            
+            console.log('se ejecuta getDatos');
+
             // TablesSales
             setSellerDatos(sellers.data.docs);
             setdatosSellerShow(sellers.data.docs);
@@ -50,7 +51,7 @@ export default function Panel() {
             setdatosShow(clientes.data.docs);
             setUserDatos(clientes.data.docs);
             setDatosRows(clientes.data);
-            
+
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -163,6 +164,7 @@ export default function Panel() {
     const deleteSaleHandler = async (props) => {
         try {
             await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: "NO" });
+            getDatos()
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -184,7 +186,7 @@ export default function Panel() {
                 <ModalRegAdminSeller tablasChange={tablasChange} />
             </div>
             <div className="border border-dark tableWrap">
-                <AdminSaleModal datos={sellerDatos} />
+                <AdminSaleModal getDatos={getDatos} datos={sellerDatos} />
                 <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} tablasChange={tablasChange} getDatos={getDatos} />
                 <table className="table table-hover table-bordered">
                     <thead className="text-center thead-dark">

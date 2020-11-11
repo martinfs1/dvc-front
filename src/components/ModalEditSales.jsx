@@ -9,7 +9,7 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
 
     const alertEdit = async (req, res) => {
         Swal.fire({
-            title: "¿Está seguro de realizar los Cambios?",
+            title: "¿Estás seguro de guardar los Cambios?",
             showDenyButton: true,
             confirmButtonText: `Guardar`,
             denyButtonText: `Cancelar`,
@@ -85,18 +85,14 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
                                                     <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
                                                 </div>
                                                 <div className="col text-center">
-                                                    <label htmlFor="mcuotas">Monto Cuotas</label>
-                                                    <input type="text" id="mcuotas" className="form-control text-center" placeholder="Monto de Cuotas" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
+                                                    <label htmlFor="mcuotas">Numero cuotas</label>
+                                                    <input type="text" id="mcuotas" className="form-control text-center" placeholder="Monto de Cuotas" name="feeAmount" onChange={onChangeHandler} value={datos.feeAmount} />
                                                 </div>
                                             </div>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="monto">N° Cuotas</label>
-                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
-                                                </div>
-                                                <div className="col text-center">
-                                                    <label htmlFor="monto">Time</label>
-                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="timeVenta" onChange={onChangeHandler} value={datos.timeVenta} />
+                                                    <label htmlFor="monto">Monto Cuota</label>
+                                                    <input type="text" id="quotaAmount" className="form-control text-center" placeholder="Número de Teléfono" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
                                                 </div>
                                                 <div className="col text-center">
                                                     <label htmlFor="enable">Habilitado</label>

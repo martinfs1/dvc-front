@@ -10,7 +10,7 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
 
     const paginas = datosRows.totalPages;
     const currentPage = datosRows.page;
-    const [ arrOfCurrButtons, setArrOfCurrButtons ] = React.useState([])
+    const [arrOfCurrButtons, setArrOfCurrButtons] = React.useState([])
 
     const RowsNumber = [];
     for (let index = 1; index <= paginas; index++) {
@@ -32,12 +32,12 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
         } else if (currentPage === 4) {
             const sliced = RowsNumber.slice(0, 5)
             tempNumberOfPages = [...sliced, "...", RowsNumber.length]
-        } else if (currentPage > 4 && currentPage < RowsNumber.length -2) {
-            const sliced1 = RowsNumber.slice(currentPage -2, currentPage);
-            const sliced2 = RowsNumber.slice(currentPage, currentPage +1);
+        } else if (currentPage > 4 && currentPage < RowsNumber.length - 2) {
+            const sliced1 = RowsNumber.slice(currentPage - 2, currentPage);
+            const sliced2 = RowsNumber.slice(currentPage, currentPage + 1);
             tempNumberOfPages = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
-        } else if (currentPage > RowsNumber.length -3) {
-            const sliced = RowsNumber.slice(RowsNumber.length -4);
+        } else if (currentPage > RowsNumber.length - 3) {
+            const sliced = RowsNumber.slice(RowsNumber.length - 4);
             tempNumberOfPages = ([1, "...", ...sliced])
         }
         setArrOfCurrButtons(tempNumberOfPages)
@@ -61,20 +61,19 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
                     </li>
                     {
                         arrOfCurrButtons.map(p => {
-                            return(
-                                <li className={`page-item ${
-                                    currentPage == p && 'active'}`}>
-                                    <span onClick={() => handlePaginate(p)} 
-                                    role="button" 
-                                    tabIndex="0" 
-                                    className="page-link">
+                            return (
+                                <li className={`page-item ${currentPage == p && 'active'}`}>
+                                    <span onClick={() => handlePaginate(p)}
+                                        role="button"
+                                        tabIndex="0"
+                                        className="page-link">
                                         {p}
                                     </span>
-                                </li>       
+                                </li>
                             )
                         })
                     }
-                    
+
                     {/* {page == datosRows.totalPages ?
                         <>
                             <li className={`page-item -2 ${Number(page - 2) == Number(datosRows.page) && 'active'}`}><span onClick={() => handlePaginate((Number(page) - 2))} role="button" tabIndex="0" className="page-link">{page - 2}</span></li>
@@ -120,31 +119,30 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
                 </ul>
             </nav>
             <div>
-                <Download datosRows={datosRows.docs} times={times} />
+                <Download datosRows={datosRows.docs} />
             </div>
         </div>
     );
 }
 
 class Download extends React.Component {
-    
+
     render() {
         return (
-            <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
+            <ExcelFile element={<i className="far fa-file-excel text-success"> Excel</i>} filename="excel">
                 <ExcelSheet dataSet={this.props.datosRows} name="Hoja 1">
                     <ExcelColumn label="Día" value="date" />
-                    <ExcelColumn label="NomreCliente" value="nameClient" />
-                    <ExcelColumn label="Vendedor" value="sellerName" />
+                    <ExcelColumn label="NombreCliente" value="nameClient" />
+                    <ExcelColumn label="Vendedor" value="fullname" />
                     <ExcelColumn label="DNI" value="dniClient" />
-                    <ExcelColumn label="N° Celuar" value="celphoneClient" />
+                    <ExcelColumn label="N° Celular" value="celphoneClient" />
                     <ExcelColumn label="Monto Aprobado" value="amountApproved" />
                     <ExcelColumn label="Cuotas" value="feeAmount" />
                     <ExcelColumn label="Monto Cuotas" value="quotaAmount" />
                     <ExcelColumn label="Cliente Nuevo" value="newClient" />
                     <ExcelColumn label="Detalle" value="saleDetail" />
-                    <ExcelColumn label="Linea de Credito" value="creditLine" />
+                    <ExcelColumn label="Linea de Crédito" value="creditLine" />
                     <ExcelColumn label="Operación" value="typeOperation" />
-                    {/* <ExcelColumn label="timeVenta" value={(col) => col.date ? new Date(col.date).getTime() : col.date} /> */}
                 </ExcelSheet>
             </ExcelFile>
         );

@@ -2,19 +2,22 @@ import React, { useState, useRef } from 'react'
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
-const SellerModal = ({funcNuevaVenta}) => {
+const SellerModal = ({ getDatos }) => {
 
   const [pdf, setPdf] = useState(null)
   const [sellerForm, setSellerForm] = useState('')
   const cerrarModal = useRef();
   const resetForm = useRef();
 
-  const actualizarState = e => {    
-    let texto = Number(e.target.value)
+  const actualizarState = e => {
+    let texto = e.target.value.toUpperCase()
+
     setSellerForm({
       ...sellerForm, [e.target.name]: texto
     })
   }
+  console.log(sellerForm);
+
   const crearNuevaVenta = async (e) => {
 
     e.preventDefault();
@@ -37,7 +40,7 @@ const SellerModal = ({funcNuevaVenta}) => {
       });
       resetForm.current.reset();
       cerrarModal.current.click();
-      funcNuevaVenta();
+      getDatos();
 
     } catch (error) {
       console.log(error);
