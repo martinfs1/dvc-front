@@ -219,7 +219,7 @@ export default function Panel() {
                                         <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortNombreSeller}>Vendedor</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="sellerName" placeholder='Vendedor...' />
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="fullname" placeholder='Vendedor...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
