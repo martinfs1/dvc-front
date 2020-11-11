@@ -2,9 +2,8 @@ import React from 'react'
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
-const AdminSaleModal = (props) => {
-
-    const { datos } = props;
+const AdminSaleModal = ({ datos }) => {
+    
     const [dataName, setDataName] = React.useState([]);
     const [options, setOptions] = React.useState([]);
     const [pdf, setPdf] = React.useState(null);
@@ -13,7 +12,7 @@ const AdminSaleModal = (props) => {
     const resetForm = React.useRef();
 
     const optionsNameSellers = () => {
-        let opciones = dataName.map(o => <option value={o.fullname}>{o.fullname}</option>)
+        let opciones = dataName.map(o => <option key={o._id} value={o.fullname}>{o.fullname}</option>)
         setOptions(opciones)
     }
 
@@ -26,10 +25,11 @@ const AdminSaleModal = (props) => {
     }, [dataName]);
 
 
-    const actualizarState = e => {
-        setSellerForm({
-            ...sellerForm, [e.target.name]: e.target.value
-        });
+    const actualizarState = e => {    
+        let texto = e.target.value.toUpperCase();
+          setSellerForm({
+            ...sellerForm, [e.target.name]: texto
+          })
     }
 
     const crearNuevaVenta = async (e) => {
@@ -106,7 +106,7 @@ const AdminSaleModal = (props) => {
                             <form onSubmit={crearNuevaVenta} ref={resetForm}>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="inputStateCredito">Linea de Crédito *</label>
+                                        <label htmlFor="inputStateCredito">Linea de Crédito *</label>
                                         <select id="inputStateCredito" className="form-control" onChange={actualizarState} name="creditLine">
                                             <option >Elegir...</option>
                                             <option value="sencillo">Sencillo</option>
@@ -114,7 +114,7 @@ const AdminSaleModal = (props) => {
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="inputStateOperacion">Indique tipo de operación *</label>
+                                        <label htmlFor="inputStateOperacion">Indique tipo de operación *</label>
                                         <select id="inputStateOperacion" className="form-control" onChange={actualizarState} name="typeOperation">
                                             <option >Elegir...</option>
                                             <option value="credito">Crédito</option>
@@ -124,15 +124,15 @@ const AdminSaleModal = (props) => {
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6 ">
-                                        <label for="inputStateNew">Cliente Nuevo *</label>
+                                        <label htmlFor="inputStateNew">Cliente Nuevo *</label>
                                         <select id="inputStateNew" className="form-control" onChange={actualizarState} name="newClient">
                                             <option >Elegir...</option>
-                                            <option value={true}>Si</option>
-                                            <option value={false}>No</option>
+                                            <option value="SI">Si</option>
+                                            <option value="NO">No</option>
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6 ">
-                                        <label for="inputStateTypeClient">Tipo de Cliente *</label>
+                                        <label htmlFor="inputStateTypeClient">Tipo de Cliente *</label>
                                         <select id="inputStateTypeClient" className="form-control" onChange={actualizarState} name="TypeClient">
                                             <option >Elegir...</option>
                                             <option value="A">A</option>
@@ -143,7 +143,7 @@ const AdminSaleModal = (props) => {
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="nombreCliente">Nombre del Cliente *</label>
+                                        <label htmlFor="nombreCliente">Nombre del Cliente *</label>
                                         <input className="form-control"
                                             id="nombreCliente"
                                             name="nameClient"
@@ -153,7 +153,7 @@ const AdminSaleModal = (props) => {
                                         />
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="dniCLiente">DNI del Cliente *</label>
+                                        <label htmlFor="dniCLiente">DNI del Cliente *</label>
                                         <input className="form-control"
                                             id="dniCLiente"
                                             name="dniClient"
@@ -167,7 +167,7 @@ const AdminSaleModal = (props) => {
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="celularCLiente">Celular del Cliente *</label>
+                                        <label htmlFor="celularCLiente">Celular del Cliente *</label>
                                         <input className="form-control"
                                             id="celularCLiente"
                                             name="celphoneClient"
@@ -178,7 +178,7 @@ const AdminSaleModal = (props) => {
                                         />
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="montoAprobado">Monto Aprobado *</label>
+                                        <label htmlFor="montoAprobado">Monto Aprobado *</label>
                                         <input className="form-control"
                                             id="montoAprobado"
                                             name="amountApproved"
@@ -191,7 +191,7 @@ const AdminSaleModal = (props) => {
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
-                                        <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
+                                        <label htmlFor="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
                                         <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
                                             <option value={0}>Elegir...</option>
                                             <option value={1}>0</option>
@@ -205,7 +205,7 @@ const AdminSaleModal = (props) => {
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="montoPorCuota">Monto por cuota *</label>
+                                        <label htmlFor="montoPorCuota">Monto por cuota *</label>
                                         <input className="form-control"
                                             id="montoPorCuota"
                                             name="feeAmount"
@@ -216,9 +216,9 @@ const AdminSaleModal = (props) => {
                                         />
                                     </div>
                                 </div>
-                                < div className = "form-row" >
-                                    <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Detalles de la operación</label>
+                                < div className="form-row" >
+                                    <div className="form-group col-sm-6">
+                                        <label htmlFor="message-text" className="col-form-label">Detalles de la operación</label>
                                         <textarea className="form-control"
                                             id="message-text"
                                             name="saleDetail"
@@ -228,7 +228,7 @@ const AdminSaleModal = (props) => {
                                         </textarea>
                                     </div>
                                     <div className="form-group col-sm-6">
-                                        <label for="vendedor" className="col-form-label">Vendedor *</label>
+                                        <label htmlFor="vendedor" className="col-form-label">Vendedor *</label>
                                         <select id="vendedor" className="form-control" onChange={actualizarState} name="sellerName">
                                             <option selected disabled>Elegir...</option>
                                             {options}
@@ -236,7 +236,7 @@ const AdminSaleModal = (props) => {
                                     </div>
                                 </div >
                                 <div className="form-group">
-                                    <label for="exampleFormControlFile1">Seleccionar Archivo PDF</label>
+                                    <label htmlFor="exampleFormControlFile1">Seleccionar Archivo PDF</label>
                                     <input
                                         type="file"
                                         className="form-control-file"

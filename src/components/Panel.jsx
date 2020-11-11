@@ -1,39 +1,56 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import '../css/Panel.css';
 import ModalEditSales from './ModalEditSales';
 import clienteAxios from '../config/axios';
-import DataTableSales from './DataTableSales';
-import DataTableSellers from './DataTableSellers';
 import AdminSaleModal from './AdminSaleModal';
 import ModalRegAdminSeller from './ModalRegAdminSeller';
+import Pagination from './Pagination';
+
+// import RowsTable from './RowsTable';
+
+const RowsTable = React.lazy(() => import('./RowsTable'));
 
 export default function Panel() {
 
     const [tablasChange, setTablasChange] = React.useState(true);
 
-    const [VentasDelMes, setVentasDelMes] = React.useState([]);
 
     // Tabla 
     const [sellerDatos, setSellerDatos] = React.useState([]);
-    const [DatosSellerShow, setDatosSellerShow] = React.useState([]);
+    const [datosSellerShow, setdatosSellerShow] = React.useState([]);
 
     // Tabla Ventas
-    const [DatosShow, setDatosShow] = React.useState([]);
+    const [datosShow, setdatosShow] = React.useState([]);
     const [userDatos, setUserDatos] = React.useState([]);
     const [fila, setFila] = React.useState({});
+
+    // Paginacion 
+    const [limit, setLimit] = React.useState(20);
+    const [page, setPage] = React.useState(1);
+    const [datosRows, setDatosRows] = React.useState([]);
+    const [params, setParams] = React.useState({})
+
 
     const getDatos = async () => {
         try {
             const sellers = await clienteAxios.get(`api/v1/allseller`);
-            const clientes = await clienteAxios.get(`api/v1/allsales`);
-
-            //TablesSales
-            setSellerDatos(sellers.data);
-            setDatosSellerShow(sellers.data);
+            const clientes = await clienteAxios.get(`api/v1/allsales`, {
+                params: {
+                    page: page,
+                    limit: limit,
+                    ...params
+                }
+            })
+            
+            // TablesSales
+            setSellerDatos(sellers.data.docs);
+            setdatosSellerShow(sellers.data.docs);
 
             //TablesSales    
-            setDatosShow(clientes.data);
-            setUserDatos(clientes.data);
+            setdatosShow(clientes.data.docs);
+            setUserDatos(clientes.data.docs);
+            setDatosRows(clientes.data);
+            
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -41,162 +58,116 @@ export default function Panel() {
     }
 
     // Sort's Table Sales
-    let fecha = new Date()
-
-    const ventasMes = () => {
-        const actual = fecha.toLocaleString('default', { month: 'long' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
-        // let ventas = userDatos.filter(item => item.month == actual);
-        let ventas = userDatos.filter(m => { return m.month.toLowerCase().includes(actual) });
-        setVentasDelMes(ventas);
-    }
 
     const sortAmount = () => {
         let sortDatosAmount = [...userDatos].sort((a, b) => (b.amountApproved - a.amountApproved))
-        if (sortDatosAmount[0] === DatosShow[0])
+        if (sortDatosAmount[0] === datosShow[0])
             sortDatosAmount = [...userDatos].sort((b, a) => (b.amountApproved - a.amountApproved))
-        setDatosShow(sortDatosAmount)
+        setdatosShow(sortDatosAmount)
     }
 
     const sortDNI = () => {
         let sortdatos = [...userDatos].sort((a, b) => (b.dniClient - a.dniClient))
-        if (sortdatos[0] === DatosShow[0])
+        if (sortdatos[0] === datosShow[0])
             sortdatos = [...userDatos].sort((b, a) => (b.dniClient - a.dniClient))
-        setDatosShow(sortdatos);
+        setdatosShow(sortdatos);
     }
 
     const sortNombre = () => {
         let sortdatos = [...userDatos].sort((a, b) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
-        if (sortdatos[0] === DatosShow[0])
+        if (sortdatos[0] === datosShow[0])
             sortdatos = [...userDatos].sort((b, a) => (a.nameClient > b.nameClient ? 1 : a.nameClient < b.nameClient ? -1 : 0))
-        setDatosShow(sortdatos);
+        setdatosShow(sortdatos);
     }
 
     const sortNombreSeller = () => {
         let sortdatos = [...userDatos].sort((a, b) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
-        if (sortdatos[0] === DatosShow[0])
+        if (sortdatos[0] === datosShow[0])
             sortdatos = [...userDatos].sort((b, a) => (a.sellerName > b.sellerName ? 1 : a.sellerName < b.sellerName ? -1 : 0))
-        setDatosShow(sortdatos);
+        setdatosShow(sortdatos);
     }
 
     const sortDia = () => {
         let sortdatos = [...userDatos].sort(function (a, b) {
             return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
         })
-        if (sortdatos[0] === DatosShow[0])
+        if (sortdatos[0] === datosShow[0])
             sortdatos = [...userDatos].sort(function (b, a) {
                 return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
             })
-        if (sortdatos[0] === DatosShow[0])
+        if (sortdatos[0] === datosShow[0])
             sortdatos = [...userDatos].sort(function (b, a) {
                 return (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)
             })
-        setDatosShow(sortdatos);
+        setdatosShow(sortdatos);
     }
 
     // Sort's Table Sellers
     const sortNombreS = () => {
         let sortdatos = [...sellerDatos].sort((a, b) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
-        if (sortdatos[0] === DatosSellerShow[0])
+        if (sortdatos[0] === datosSellerShow[0])
             sortdatos = [...sellerDatos].sort((b, a) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
-        setDatosShow(sortdatos);
+        setdatosShow(sortdatos);
     }
-
 
     React.useEffect(() => {
         getDatos();
-    }, [fila]);
+    }, [limit, page, params.enable]);
 
-    React.useEffect(() => {
-        ventasMes();
-    }, [DatosShow]);
+    // Paginate
+
+    const handlePaginate = (n) => {
+        setPage(n);
+    }
+
+    const handlePaginateNext = (n) => {
+        datosRows.hasNextPage && setPage(n);
+    }
+
+    const handlePaginatePrev = (n) => {
+        datosRows.hasPrevPage && setPage(n);
+    }
+
+    const parameterHandler = (e) => {
+        let texto = e.target.value.toUpperCase();
+        setParams({ ...params, [e.target.name]: texto });
+    }
+
+    const enterSearch = (e) => {
+        if (params[e.target.name] === '') {
+            if (e.target.value.length < 1) {
+                delete params[e.target.name]
+            }
+        }
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            getDatos();
+        }
+    }
+
+    // Fin Paginate
+
+    const handleChangeRows = (n) => {
+        setLimit(n);
+    }
 
     const onClickHandler = (datoFila) => {
         setFila(datoFila);
     }
 
     const onChangeHandler = (e) => {
-        setFila({ ...fila, [e.target.name]: e.target.value })
+        let texto = e.target.value.toUpperCase();
+        setFila({ ...fila, [e.target.name]: texto })
     }
 
     const deleteSaleHandler = async (props) => {
         try {
-            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: false });
+            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: "NO" });
         } catch (error) {
             const { response } = error;
             console.log(response);
         }
     }
-
-    const search = (e) => {
-        const Filtrados = [];
-        let texto = e.target.value.toLowerCase();
-
-        if (tablasChange) {
-            for (let datos of userDatos) {
-                let titulo = datos.nameClient.toLowerCase();
-                let dni = datos.dniClient.toString();
-                let dia = datos.date;
-                if (titulo.indexOf(texto) !== -1 || dni.indexOf(texto) !== -1 || dia.indexOf(texto) !== -1) {
-                    Filtrados.push(datos);
-                    setDatosShow(Filtrados.map(f => f))
-                }
-            }
-        } else {
-            for (let datos of DatosSellerShow) {
-                let nombre = datos.fullname.toLowerCase();
-                let email = datos.email.toLowerCase();
-                // let dni = datos.dni.toString();
-                // let dni = datos.dniClient.toString();
-                // let dia = datos.date;
-                // || dni.indexOf(texto) !== -1 || dia.indexOf(texto) !== -1
-                if (nombre.indexOf(texto) !== -1 || email.indexOf(texto) !== -1) {
-                    Filtrados.push(datos);
-                    setSellerDatos(Filtrados.map(f => f))
-                }
-            }
-        }
-    }
-
-    const RowsSales = (props) => {
-        const { datoFila } = props;
-        return (
-            <tr key={datoFila._id} id={datoFila._id}>
-                <th className="py-1 text-nowrap" scope="row">{datoFila.date}</th>
-                <td className="py-1 text-nowrap" colSpan="3">{datoFila.nameClient}</td>
-                <td className="py-1 text-nowrap">{datoFila.dniClient}</td>
-                <td className="py-1 text-nowrap">{datoFila.celphoneClient}</td>
-                <td className="py-1 text-nowrap" colSpan="3">{datoFila.sellerName}</td>
-                <td className="py-1 text-nowrap">${datoFila.amountApproved}</td>
-                <td className="py-1 text-nowrap">{datoFila.quotaAmount}</td>
-                <td className="py-1 text-nowrap">${datoFila.feeAmount}</td>
-                <td className="py-1 text-nowrap">{datoFila.saleDetail ? 'Ver Observacion' : "-" }</td>
-                <td className="py-1 text-nowrap"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i role="button" tabIndex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => deleteSaleHandler(datoFila)}></i></td>
-            </tr>
-        )
-    }
-    console.log(DatosShow);
-
-    const RowsSellers = (props) => {
-        const { datoFila } = props;
-        return (
-            <tr key={datoFila._id} id={datoFila._id}>
-                <th className="py-1 text-nowrap" colSpan="3" scope="row">{datoFila.fullname}</th>
-                <td className="py-1 text-nowrap"></td>
-                <td className="py-1 text-nowrap">{datoFila.celphone}</td>
-                <td className="py-1 text-nowrap" colSpan="3">{datoFila.email}</td>
-                <td className="py-1 text-nowrap" ></td>
-                <td className="py-1 text-nowrap"><a data-toggle="modal" href="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(datoFila)}></i></a><i className="far fa-trash-alt text-danger mx-1"></i></td>
-            </tr>
-        )
-    }
-
-    const filasSales = DatosShow.map(f =>
-        <RowsSales datoFila={f} onClickHandler={onClickHandler} />
-    );
-
-    const filasSellers = sellerDatos.map(f =>
-        <RowsSellers datoFila={f} onClickHandler={onClickHandler} />
-    );
 
     return (
         <div className="my-5 container">
@@ -209,26 +180,101 @@ export default function Panel() {
                 </select>
             </div>
             <div className="row justify-content-between px-3 my-3">
-                <input type="search" className="form-control col-12 col-md-7 w-100" onChange={search} placeholder="Buscar..." />
-                <button data-toggle="modal" data-target="#admin-sale" className="btn btn-secondary mt-3 mt-md-0 col-12 col-md-2">Nueva Venta</button>
+                <button data-toggle="modal" data-target="#admin-sale" className="btn btn-secondary  mb-3 mt-2 mt-md-0 col-12 col-md-2">Nueva Venta</button>
+                <ModalRegAdminSeller tablasChange={tablasChange} />
             </div>
-            <ModalRegAdminSeller tablasChange={tablasChange} />
             <div className="border border-dark tableWrap">
                 <AdminSaleModal datos={sellerDatos} />
-                <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} tablasChange={tablasChange} />
-                {
-                    tablasChange ?
-                        <>
-                            <DataTableSales datos={filasSales} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia} DatosShow={DatosShow}
-                            />
-                        </>
-                        :
-                        <>
-                            <DataTableSellers datos={filasSellers} sortDNI={sortDNI} sortAmount={sortAmount} sortNombre={sortNombre} sortSeller={sortNombreSeller} sortDia={sortDia}
-                            />
-                        </>
-                }
+                <ModalEditSales datos={fila} onChangeHandler={onChangeHandler} tablasChange={tablasChange} getDatos={getDatos} />
+                <table className="table table-hover table-bordered">
+                    <thead className="text-center thead-dark">
+                        <tr>
+                            {
+                                tablasChange ?
+                                    <>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDia}>Día</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="date" placeholder='Día...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortNombre}>Nombre Cliente</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="nameClient" placeholder='Nombre...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDNI}>DNI</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="dniClient" placeholder='DNI...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0">Teléfono</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="celphoneClient" placeholder='Teléfono...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortNombreSeller}>Vendedor</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="sellerName" placeholder='Vendedor...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortNombre}>Tipo Venta</p>
+                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="creditLine" placeholder='Tipo Venta...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortAmount}>Venta</p>
+                                                <input className="form-control" onChange={parameterHandler} name="amountApproved" onKeyUp={enterSearch} placeholder='Venta...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky px-1" onClick={sortNombre}>
+                                            <p className="text-center mb-2" >Monto Cuotas</p>
+
+                                        </th>
+                                        <th className="py-0 px-0 position-sticky"><p className="text-center">Cuotas</p></th>
+                                        <th className="py-0 position-sticky">
+                                            <select className="custom-select-sm mb-3 rounded" name="enable" onChange={parameterHandler} as="select">
+                                                <option selected value="SI">Habilitado</option>
+                                                <option value="NO">Deshabilitado</option>
+                                            </select>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1"><p className="text-center">Observación</p></th>
+                                        <th className="py-0 position-sticky text-nowrap px-1"><p className="text-center">Acción</p></th>
+                                    </>
+                                    :
+                                    <>
+                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3" onClick={sortNombre}>Nombre</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1" onClick={sortDNI}>DNI</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">Teléfono</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">Email</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">Venta Total</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">Acción</th>
+                                    </>
+
+                            }
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <Suspense fallback={
+                            <div className="spinner-border text-primary text-center" role="status">
+                                <span className="sr-only text-center">Cargando...</span>
+                            </div>
+                        }>
+                            <RowsTable tablasChange={tablasChange} datosShow={datosShow} datosSellerShow={datosSellerShow} onClickHandler={onClickHandler} deleteSaleHandler={deleteSaleHandler} getDatos={getDatos} />
+                        </Suspense>
+                    </tbody>
+                </table>
             </div>
+            <Pagination datosRows={datosRows} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
         </div>
     );
 }

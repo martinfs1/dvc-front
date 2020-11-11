@@ -27,24 +27,22 @@ function ModalRegAdminSeller() {
         setRegData({ ...regData, [e.target.name]: e.target.value })
     }
 
-    console.log(regData);
-
     return (
         <>
-            <button type="button" className="btn btn-secondary mb-3 mt-2 mt-md-0 col-12 col-md-2" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" className="btn btn-secondary mb-3 mt-2 mt-md-0 col-12 col-md-2" data-toggle="modal" data-target="#regmodal">
                 Dar de Alta
             </button>
-            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="regmodal" tabIndex="-1" aria-labelledby="regmodalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
-                        <div>
-                            <div class="modal-header">
+                        <div className="mt-3">
+                            <div className="row justify-content-between w-100 mx-0 px-4">
                                 <h5>Registro { typeReg }</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <ul className="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+                            <ul className="nav nav-pills mb-3 justify-content-center mt-2" id="pills-tab" role="tablist">
                                 <li onClick={() => setTypeReg('Vendedor')} className="nav-item mx-1 btn btn-secondary active" role="presentation">
                                     Vendedor
                                 </li>
@@ -52,6 +50,7 @@ function ModalRegAdminSeller() {
                                     Administrador
                                 </li>
                             </ul>
+                            <hr/>
                         </div>
                         <div className="modal-body">
                             <div className="tab-content" id="pills-tabContent">

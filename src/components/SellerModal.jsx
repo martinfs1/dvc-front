@@ -2,16 +2,17 @@ import React, { useState, useRef } from 'react'
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
-const SellerModal = () => {
+const SellerModal = ({funcNuevaVenta}) => {
 
   const [pdf, setPdf] = useState(null)
   const [sellerForm, setSellerForm] = useState('')
   const cerrarModal = useRef();
   const resetForm = useRef();
 
-  const actualizarState = e => {
+  const actualizarState = e => {    
+    let texto = Number(e.target.value)
     setSellerForm({
-      ...sellerForm, [e.target.name]: e.target.value
+      ...sellerForm, [e.target.name]: texto
     })
   }
   const crearNuevaVenta = async (e) => {
@@ -36,7 +37,7 @@ const SellerModal = () => {
       });
       resetForm.current.reset();
       cerrarModal.current.click();
-
+      funcNuevaVenta();
 
     } catch (error) {
       console.log(error);
@@ -96,7 +97,7 @@ const SellerModal = () => {
               <form onSubmit={crearNuevaVenta} ref={resetForm}>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputStateCredito">Linea de Crédito *</label>
+                    <label htmlFor="inputStateCredito">Linea de Crédito *</label>
                     <select id="inputStateCredito" className="form-control" onChange={actualizarState} name="creditLine">
                       <option >Elegir...</option>
                       <option value="sencillo">Sencillo</option>
@@ -104,7 +105,7 @@ const SellerModal = () => {
                     </select>
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="inputStateOperacion">Indique tipo de operación *</label>
+                    <label htmlFor="inputStateOperacion">Indique tipo de operación *</label>
                     <select id="inputStateOperacion" className="form-control" onChange={actualizarState} name="typeOperation">
                       <option >Elegir...</option>
                       <option value="credito">Crédito</option>
@@ -114,15 +115,15 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6 ">
-                    <label for="inputStateNew">Cliente Nuevo *</label>
+                    <label htmlFor="inputStateNew">Cliente Nuevo *</label>
                     <select id="inputStateNew" className="form-control" onChange={actualizarState} name="newClient">
                       <option >Elegir...</option>
-                      <option value={true}>Si</option>
-                      <option value={false}>No</option>
+                      <option value="SI">Si</option>
+                      <option value="NO">No</option>
                     </select>
                   </div>
                   <div className="form-group col-sm-6 ">
-                    <label for="inputStateTypeClient">Tipo de Cliente *</label>
+                    <label htmlFor="inputStateTypeClient">Tipo de Cliente *</label>
                     <select id="inputStateTypeClient" className="form-control" onChange={actualizarState} name="TypeClient">
                       <option >Elegir...</option>
                       <option value="A">A</option>
@@ -133,7 +134,7 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="nombreCliente">Nombre del Cliente *</label>
+                    <label htmlFor="nombreCliente">Nombre del Cliente *</label>
                     <input className="form-control"
                       id="nombreCliente"
                       name="nameClient"
@@ -143,7 +144,7 @@ const SellerModal = () => {
                     />
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="dniCLiente">DNI del Cliente *</label>
+                    <label htmlFor="dniCLiente">DNI del Cliente *</label>
                     <input className="form-control"
                       id="dniCLiente"
                       name="dniClient"
@@ -157,7 +158,7 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="celularCLiente">Celular del Cliente *</label>
+                    <label htmlFor="celularCLiente">Celular del Cliente *</label>
                     <input className="form-control"
                       id="celularCLiente"
                       name="celphoneClient"
@@ -168,11 +169,11 @@ const SellerModal = () => {
                     />
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="montoAprobado">Monto Aprobado *</label>
+                    <label htmlFor="montoAprobado">Monto Aprobado *</label>
                     <input className="form-control"
                       id="montoAprobado"
                       name="amountApproved"
-                      type="text"
+                      type="number"
                       onKeyPress={OnlyNumber}
                       onChange={actualizarState}
                       required
@@ -181,7 +182,7 @@ const SellerModal = () => {
                 </div>
                 <div className="form-row">
                   <div className="form-group col-sm-6">
-                    <label for="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
+                    <label htmlFor="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
                     <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
                       <option value={0}>Elegir...</option>
                       <option value={1}>0</option>
@@ -195,7 +196,7 @@ const SellerModal = () => {
                     </select>
                   </div>
                   <div className="form-group col-sm-6">
-                    <label for="montoPorCuota">Monto por cuota *</label>
+                    <label htmlFor="montoPorCuota">Monto por cuota *</label>
                     <input className="form-control"
                       id="montoPorCuota"
                       name="feeAmount"
@@ -207,7 +208,7 @@ const SellerModal = () => {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label for="message-text" className="col-form-label">Detalles de la operación</label>
+                  <label htmlFor="message-text" className="col-form-label">Detalles de la operación</label>
                   <textarea className="form-control"
                     id="message-text"
                     name="saleDetail"
@@ -216,7 +217,7 @@ const SellerModal = () => {
                   </textarea>
                 </div>
                 <div className="form-group">
-                  <label for="exampleFormControlFile1">Seleccionar Archivo PDF</label>
+                  <label htmlFor="exampleFormControlFile1">Seleccionar Archivo PDF</label>
                   <input
                     type="file"
                     className="form-control-file"

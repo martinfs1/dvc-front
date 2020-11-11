@@ -5,22 +5,22 @@ import clienteAxios from '../config/axios';
 
 const SellerPage = () => {
 
-  const [sales, setSales] = useState([])
-  const [saleShow, setSaleShow] = useState([])
-  const [sellerName, setSellerName] = useState("")
+  const [sales, setSales] = useState([]);
+  const [saleShow, setSaleShow] = useState([]);
+  const [sellerName, setSellerName] = useState("");
+  const [nuevaVenta, setNuevaVenta] = useState(true)
 
-  const getDatos = async (req, res) => {
+  const fecha = new Date();
+
+  const getDatos = async () => {
     try {
       const prueba = await clienteAxios.get('api/v1/allsales');
       setSales(prueba.data);
-      setSaleShow(prueba.data);
-      console.log('prueba', prueba.data)
     } catch (error) {
-      console.log(error)
+      const { response } = error;
+      console.log(response);
     }
   }
-
-  let fecha = new Date()
 
   const ventasMes = () => {
     const actual = fecha.toLocaleString('default', { month: '2-digit' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
@@ -28,15 +28,20 @@ const SellerPage = () => {
     setSaleShow(ventas);
   }
 
+  const funcNuevaVenta = () => {
+    setNuevaVenta(!nuevaVenta);
+  }
+
+  console.log(sales);
+
   useEffect(() => {
     setSellerName(localStorage.getItem('username'))
-    getDatos()
-
-  }, []);
+    getDatos();
+  }, [nuevaVenta]);
 
   useEffect(() => {
-    ventasMes()
-  }, [sales])
+    ventasMes();
+  }, [sales]);
 
   const search = (e) => {
 
@@ -87,7 +92,7 @@ const SellerPage = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item">
-                <SellerModal />
+                <SellerModal funcNuevaVenta={funcNuevaVenta} />
               </li>
             </ul>
             <form className="form-inline my-2 my-sm-0">
