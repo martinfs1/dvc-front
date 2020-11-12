@@ -5,7 +5,7 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page }) {
+function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page, tablasChange }) {
 
     const paginas = datosRows.totalPages;
     const currentPage = datosRows.page;
@@ -24,7 +24,7 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
 
     React.useEffect(() => {
         let tempNumberOfPages = [...RowsNumber]
-        if (page >= 1 && page <= 3) {
+        if (currentPage >= 1 && currentPage <= 3 && paginas >= 2) {
             tempNumberOfPages = [1, 2, 3, 4, '...', RowsNumber.length]
         } else if (currentPage === 4) {
             const sliced = RowsNumber.slice(0, 5)
@@ -35,9 +35,25 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
             tempNumberOfPages = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
         } else if (currentPage > RowsNumber.length - 3) {
             const sliced = RowsNumber.slice(RowsNumber.length - 4);
-            tempNumberOfPages = ([1, "...", ...sliced])
+            tempNumberOfPages = ([...sliced])
         }
         setArrOfCurrButtons(tempNumberOfPages)
+
+        // let tempNumberOfPages = [...RowsNumber]
+        // if (currentPage >= 1 && currentPage <= 3 && paginas >= 2) {
+        //     tempNumberOfPages = [1, 2, 3, 4, '...', RowsNumber.length]
+        // } else if (currentPage === 4) {
+        //     const sliced = RowsNumber.slice(0, 5)
+        //     tempNumberOfPages = [...sliced, "...", RowsNumber.length]
+        // } else if (currentPage > 4 && currentPage < RowsNumber.length - 2) {
+        //     const sliced1 = RowsNumber.slice(currentPage - 2, currentPage);
+        //     const sliced2 = RowsNumber.slice(currentPage, currentPage + 1);
+        //     tempNumberOfPages = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
+        // } else if (currentPage > RowsNumber.length - 3) {
+        //     const sliced = RowsNumber.slice(RowsNumber.length - 4);
+        //     tempNumberOfPages = ([...sliced])
+        // }
+        // setArrOfCurrButtons(tempNumberOfPages)
     }, [currentPage, paginas])
 
     return (
@@ -56,11 +72,12 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
                     <li className="page-item">
                         <span onClick={() => datosRows.prevPage && handlePaginatePrev(datosRows.prevPage)} role="button" tabIndex="0" className="page-link">&le;</span>
                     </li>
-                    {
+                    {   tablasChange ?
                         arrOfCurrButtons.map(p => {
                             return (
                                 <li className={`page-item ${currentPage == p && 'active'}`}>
                                     <span onClick={() => handlePaginate(p)}
+                                        key={p}
                                         role="button"
                                         tabIndex="0"
                                         className="page-link">
@@ -69,6 +86,8 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
                                 </li>
                             )
                         })
+                        :
+                        ''
                     }
                     <li className="page-item">
                         <span onClick={() => datosRows.hasNextPage && handlePaginateNext(datosRows.nextPage)} role="button" tabIndex="0" className="page-link">&ge;</span>
@@ -79,7 +98,7 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
                 </ul>
             </nav>
             <div>
-                <Download datosRows={datosRows.docs} />
+                <Download datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} />
             </div>
         </div>
     );
@@ -89,22 +108,48 @@ class Download extends React.Component {
 
     render() {
         return (
-            <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
-                <ExcelSheet data={this.props.datosRows} name="Hoja 1">
-                    <ExcelColumn label="Día" value="date" />
-                    <ExcelColumn label="NomreCliente" value="nameClient" />
-                    <ExcelColumn label="Vendedor" value="fullname" />
-                    <ExcelColumn label="DNI" value="dniClient" />
-                    <ExcelColumn label="N° Celular" value="celphoneClient" />
-                    <ExcelColumn label="Monto Aprobado" value="amountApproved" />
-                    <ExcelColumn label="Cuotas" value="feeAmount" />
-                    <ExcelColumn label="Monto Cuotas" value="quotaAmount" />
-                    <ExcelColumn label="Cliente Nuevo" value="newClient" />
-                    <ExcelColumn label="Detalle" value="saleDetail" />
-                    <ExcelColumn label="Linea de Crédito" value="creditLine" />
-                    <ExcelColumn label="Operación" value="typeOperation" />
-                </ExcelSheet>
-            </ExcelFile>
+            <>
+                {
+                    this.props.tablasChange ?
+                        <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
+                            <ExcelSheet data={this.props.datosShow} name="Hoja 1">
+                                <ExcelColumn label="Día" value="date" />
+                                <ExcelColumn label="NomreCliente" value="nameClient" />
+                                <ExcelColumn label="Vendedor" value="fullname" />
+                                <ExcelColumn label="DNI" value="dniClient" />
+                                <ExcelColumn label="N° Celular" value="celphoneClient" />
+                                <ExcelColumn label="Monto Aprobado" value="amountApproved" />
+                                <ExcelColumn label="Cuotas" value="feeAmount" />
+                                <ExcelColumn label="Monto Cuotas" value="quotaAmount" />
+                                <ExcelColumn label="Cliente Nuevo" value="newClient" />
+                                <ExcelColumn label="Detalle" value="saleDetail" />
+                                <ExcelColumn label="Linea de Crédito" value="creditLine" />
+                                <ExcelColumn label="Operación" value="typeOperation" />
+                            </ExcelSheet>
+                        </ExcelFile>
+                        :
+                        <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
+                            <ExcelSheet data={this.props.montosTotalesShow} name="Hoja 2">
+                                <ExcelColumn label="Nombre Vendedor" value={(col) => col.seller.fullname} />
+                                <ExcelColumn label="DNI" value={(col) => Number(col.seller.dni)} />
+                                <ExcelColumn label="Venta Total" value={(col) => parseInt(col.annualAmountApproved)} />
+                                <ExcelColumn label="Enero" value="enero" />
+                                <ExcelColumn label="Febrero" value="febrero" />
+                                <ExcelColumn label="Marzo" value="marzo" />
+                                <ExcelColumn label="Abril" value="abril" />
+                                <ExcelColumn label="Mayo" value="mayo" />
+                                <ExcelColumn label="Junio" value="junio" />
+                                <ExcelColumn label="Julio" value="julio" />
+                                <ExcelColumn label="Agosto" value="agosto" />
+                                <ExcelColumn label="Septiembre" value="septiembre" />
+                                <ExcelColumn label="Octubre" value="octubre" />
+                                <ExcelColumn label="Noviembre" value="noviembre" />
+                                <ExcelColumn label="Diciembre" value="diciembre" />
+                            </ExcelSheet>
+                        </ExcelFile>
+
+                }
+            </>
         );
     }
 }

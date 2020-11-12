@@ -18,6 +18,8 @@ export default function Panel() {
     // Tabla 
     const [sellerDatos, setSellerDatos] = React.useState([]);
     const [datosSellerShow, setdatosSellerShow] = React.useState([]);
+    const [montosTotales, setMontosTotales] = React.useState([]);
+    const [montosTotalesShow, setMontosTotalesShow] = React.useState([]);
 
     // Tabla Ventas
     const [datosShow, setdatosShow] = React.useState([]);
@@ -34,23 +36,30 @@ export default function Panel() {
     const getDatos = async () => {
         try {
             const sellers = await clienteAxios.get(`api/v1/allseller`);
-            const clientes = await clienteAxios.get(`api/v1/allsales`, {
+            const amountTotals = await clienteAxios.get(`api/v1/montosales`, {
+                params: {
+
+                }
+            });
+            const ventas = await clienteAxios.get(`api/v1/allsales`, {
                 params: {
                     page: page,
                     limit: limit,
                     ...params
                 }
             })
-            console.log('se ejecuta getDatos');
+
+            setMontosTotales(amountTotals.data);
+            setMontosTotalesShow(amountTotals.data);
 
             // TablesSales
             setSellerDatos(sellers.data.docs);
             setdatosSellerShow(sellers.data.docs);
 
             //TablesSales    
-            setdatosShow(clientes.data.docs);
-            setUserDatos(clientes.data.docs);
-            setDatosRows(clientes.data);
+            setdatosShow(ventas.data.docs);
+            setUserDatos(ventas.data.docs);
+            setDatosRows(ventas.data);
 
         } catch (error) {
             const { response } = error;
@@ -104,11 +113,132 @@ export default function Panel() {
     }
 
     // Sort's Table Sellers
+
     const sortNombreS = () => {
-        let sortdatos = [...sellerDatos].sort((a, b) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
-        if (sortdatos[0] === datosSellerShow[0])
-            sortdatos = [...sellerDatos].sort((b, a) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
-        setdatosShow(sortdatos);
+        let sortdatos = [...montosTotales].sort((a, b) => (a.seller.fullname > b.seller.fullname ? 1 : a.seller.fullname < b.seller.fullname ? -1 : 0))
+        if (sortdatos[0] === montosTotalesShow[0])
+            sortdatos = [...montosTotales].sort((b, a) => (a.seller.fullname > b.seller.fullname ? 1 : a.seller.fullname < b.seller.fullname ? -1 : 0))
+        setMontosTotalesShow(sortdatos);
+    }
+
+    const sortDNISe = () => {
+        let sortdatos = [...montosTotales].sort((a, b) => (b.seller.dni - a.seller.dni))
+        if (sortdatos[0] === montosTotalesShow[0])
+            sortdatos = [...montosTotales].sort((b, a) => (b.seller.dni - a.seller.dni))
+        setMontosTotalesShow(sortdatos);
+    }
+
+    const sortDiaS = () => {
+        let sortdatos = [...montosTotales].sort(function (a, b) {
+            return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
+        })
+        if (sortdatos[0] === montosTotalesShow[0])
+            sortdatos = [...montosTotales].sort(function (b, a) {
+                return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
+            })
+        if (sortdatos[0] === montosTotalesShow[0])
+            sortdatos = [...montosTotales].sort(function (b, a) {
+                return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
+            })
+        setMontosTotalesShow(sortdatos);
+    }
+
+    const sortEnero = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.enero - a.enero))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.enero - a.enero))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortFebrero = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.febrero - a.febrero))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.febrero - a.febrero))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortMarzo = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.marzo - a.marzo))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.marzo - a.marzo))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortAbril = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.abril - a.abril))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.abril - a.abril))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortMayo = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.mayo - a.mayo))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.mayo - a.mayo))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortJunio = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.junio - a.junio))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.junio - a.junio))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortJulio = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.julio - a.julio))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.julio - a.julio))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortAgosto = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.agosto - a.agosto))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.agosto - a.agosto))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortSeptiembre = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.septiembre - a.septiembre))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.septiembre - a.septiembre))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortOctubre = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.octubre - a.octubre))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.octubre - a.octubre))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortNoviembre = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.noviembre - a.noviembre))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.noviembre - a.noviembre))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const sortDiciembre = () => {
+        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.diciembre - a.diciembre))
+        if (sortDatosAmount[0] === montosTotalesShow[0])
+            sortDatosAmount = [...montosTotales].sort((b, a) => (b.diciembre - a.diciembre))
+        setMontosTotalesShow(sortDatosAmount)
+    }
+
+    const search = (e) => {
+        const Filtrados = [];
+        let texto = e.target.value.toUpperCase();
+        for (let montos of montosTotales) {
+            let name = montos.seller.fullname;
+            let dni = montos.seller.dni.toString();
+            let year = montos.year;
+            if (name.indexOf(texto) !== -1 || dni.indexOf(texto) !== -1 || year.indexOf(texto) !== -1) {
+                Filtrados.push(montos);
+                setMontosTotalesShow(Filtrados.map(f => f))
+            }
+        }
     }
 
     React.useEffect(() => {
@@ -252,12 +382,38 @@ export default function Panel() {
                                     </>
                                     :
                                     <>
-                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3" onClick={sortNombre}>Nombre</th>
-                                        <th className="py-0 position-sticky text-nowrap px-1" onClick={sortDNI}>DNI</th>
-                                        <th className="py-0 position-sticky text-nowrap px-1">Teléfono</th>
-                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">Email</th>
-                                        <th className="py-0 position-sticky text-nowrap px-1">Venta Total</th>
-                                        <th className="py-0 position-sticky text-nowrap px-1">Acción</th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDiaS}>Año</p>
+                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="year" placeholder='Año...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortNombreS}>Vendedor</p>
+                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="fullname" placeholder='Vendedor...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap px-1">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDNISe}>DNI</p>
+                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="dni" placeholder='DNI...' />
+                                            </div>
+                                        </th>
+                                        <th className="position-sticky text-nowrap text-center px-1">Venta Total</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortEnero}>Enero</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortFebrero}>Febrero</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortMarzo}>Marzo</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortAbril}>Abril</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortMayo}>Mayo</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortJunio}>Junio</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortJulio}>Julio</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortAgosto}>Agosto</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortSeptiembre}>Septiembre</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortOctubre}>Octubre</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortNoviembre}>Noviembre</th>
+                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortDiciembre}>Diciembre</th>
+                                        <th className="position-sticky text-nowrap text-center px-1">Accion</th>
                                     </>
 
                             }
@@ -271,12 +427,12 @@ export default function Panel() {
                                 <span className="sr-only text-center">Cargando...</span>
                             </div>
                         }>
-                            <RowsTable tablasChange={tablasChange} datosShow={datosShow} datosSellerShow={datosSellerShow} onClickHandler={onClickHandler} deleteSaleHandler={deleteSaleHandler} getDatos={getDatos} />
+                            <RowsTable tablasChange={tablasChange} datosShow={datosShow} montosTotalesShow={montosTotalesShow} datosSellerShow={datosSellerShow} onClickHandler={onClickHandler} deleteSaleHandler={deleteSaleHandler} getDatos={getDatos} />
                         </Suspense>
                     </tbody>
                 </table>
             </div>
-            <Pagination datosRows={datosRows} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
+            <Pagination datosRows={datosRows} datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
         </div>
     );
 }

@@ -29,7 +29,6 @@ function ModalRegAdminSeller() {
             })
         }
     }
-    console.log(typeReg);
 
     const changeHandler = (e) => {
         setRegData({ ...regData, [e.target.name]: e.target.value })
@@ -51,10 +50,10 @@ function ModalRegAdminSeller() {
                                 </button>
                             </div>
                             <ul className="nav nav-pills mb-3 justify-content-center mt-2" id="pills-tab" role="tablist">
-                                <li onClick={() => setTypeReg('Vendedor')} className="nav-item mx-1 btn btn-secondary active" role="presentation">
+                                <li onClick={() => setTypeReg('Vendedor')} className={`nav-item mx-1 btn btn-secondary ${typeReg === "Vendedor" && 'active'}`}  role="presentation">
                                     Vendedor
                                 </li>
-                                <li onClick={() => setTypeReg('Administrador')} className="nav-item mx-1 btn btn-secondary" role="presentation">
+                                <li onClick={() => setTypeReg('Administrador')} className={`nav-item mx-1 btn btn-secondary ${typeReg !== "Vendedor" && 'active'}`} role="presentation">
                                     Administrador
                                 </li>
                             </ul>

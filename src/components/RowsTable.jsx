@@ -1,7 +1,7 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 
-function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerShow, tablasChange, getDatos }) {
+function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerShow, montosTotalesShow, tablasChange, getDatos }) {
 
 
     const [obs, setObs] = React.useState('')
@@ -43,7 +43,7 @@ function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerSh
                 tablasChange ?
                     datosShow.map(f =>
                         <tr key={f._id} id={f._id}>
-                            <th className="py-1 text-nowrap" scope="row">{f.date}</th>
+                            <td className="py-1 text-nowrap" scope="row">{f.date}</td>
                             <td className="py-1 text-nowrap" colSpan="3">{f.nameClient}</td>
                             <td className="py-1 text-nowrap">{f.dniClient}</td>
                             <td className="py-1 text-nowrap">{f.celphoneClient}</td>
@@ -54,17 +54,28 @@ function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerSh
                             <td className="py-1 text-nowrap text-center">{f.feeAmount}</td>
                             <td className="py-1 text-nowrap text-center">{f.enable}</td>
                             <td className="py-1 text-nowrap text-center">{f.saleDetail ? <button className="btn btn-primary py-0" onClick={() => handlerObs(f.saleDetail)} data-toggle="modal" data-target="#modalObservacion">Ver</button> : "-"}</td>
-                            <td className="py-1 text-nowrap"><a data-toggle="modal" data-target="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(f)}></i></a><i role="button" tabIndex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => alertEdit(f)}></i></td>
+                            <td className="py-1 text-nowrap"><a data-toggle="modal" data-target="#exampleModal"><i className="fas fa-edit text-primary mx-1" role="button" tabIndex="0" onClick={() => onClickHandler(f)}></i></a><i role="button" tabIndex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => alertEdit(f)}></i></td>
                         </tr>)
                     :
-                    datosSellerShow.map(f =>
+                    montosTotalesShow.map(f =>
                         <tr key={f._id} id={f._id}>
-                            <th className="py-1 text-nowrap" colSpan="3" scope="row">{f.fullname}</th>
-                            <td className="py-1 text-nowrap"></td>
-                            <td className="py-1 text-nowrap">{f.celphone}</td>
-                            <td className="py-1 text-nowrap" colSpan="3">{f.email}</td>
-                            <td className="py-1 text-nowrap" ></td>
-                            <td className="py-1 text-nowrap"><a data-toggle="modal" data-target="#exampleModal"><i className="fas fa-edit text-primary mx-1" onClick={() => onClickHandler(f)}></i></a><i className="far fa-trash-alt text-danger mx-1"></i></td>
+                            <td className="py-1 text-nowrap">{f.year}</td>
+                            <td className="py-1 text-nowrap" colSpan="3" scope="row">{f.seller.fullname}</td>
+                            <td className="py-1 text-nowrap">{f.seller.dni}</td>
+                            <td className="py-1 text-nowrap">${f.annualAmountApproved}</td>
+                            <td className="py-1 text-nowrap">${f.enero}</td>
+                            <td className="py-1 text-nowrap">${f.febrero}</td>
+                            <td className="py-1 text-nowrap">${f.marzo}</td>
+                            <td className="py-1 text-nowrap">${f.abril}</td>
+                            <td className="py-1 text-nowrap">${f.mayo}</td>
+                            <td className="py-1 text-nowrap">${f.junio}</td>
+                            <td className="py-1 text-nowrap">${f.julio}</td>
+                            <td className="py-1 text-nowrap">${f.agosto}</td>
+                            <td className="py-1 text-nowrap">${f.septiembre}</td>
+                            <td className="py-1 text-nowrap">${f.octubre}</td>
+                            <td className="py-1 text-nowrap">${f.noviembre}</td>
+                            <td className="py-1 text-nowrap">${f.diciembre}</td>
+                            <td className="py-1 text-nowrap"><a data-toggle="modal" data-target="#exampleModal"><i className="fas fa-edit text-primary mx-1" role="button" tabIndex="0" onClick={() => onClickHandler(f)}></i></a><i className="far fa-trash-alt text-danger mx-1" role="button" tabIndex="0"></i></td>
                         </tr>
                     )
             }
