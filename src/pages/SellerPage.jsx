@@ -50,7 +50,7 @@ const SellerPage = () => {
   }
 
   const ventas = saleShow.map(sale =>
-    <div key={sale._id} className="px-0 col-12 col-md-3 mx-1 my-4 card DivContainer justify-content-around saleCard  ">
+    <div key={sale._id} className="px-0 col-12 col-md-3 mx-1 my-4 card DivContainer justify-content-around saleCard">
       <div className="card-header d-flex w-100 justify-content-between flex-wrap mb-4" >
         <h5 className="mb-0">{sale.nameClient}</h5>
         <small className="fecha-alta">
@@ -109,8 +109,8 @@ const SellerPage = () => {
       </div>
 
       <div className="container">
+        <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
         <div className="row justify-content-around">
-          <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
           {ventas}
         </div>
       </div>
