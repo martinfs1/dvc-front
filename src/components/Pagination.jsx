@@ -1,12 +1,11 @@
 import React from 'react';
-import ExcelExport from 'react-export-excel';
+import ReactExport from "react-export-excel";
 
-const ExcelFile = ExcelExport.ExcelFile;
-const ExcelSheet = ExcelExport.ExcelFile.ExcelSheet;
-const ExcelColumn = ExcelExport.ExcelFile.ExcelColumn;
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page }) {
-
+function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page }) {
 
     const paginas = datosRows.totalPages;
     const currentPage = datosRows.page;
@@ -16,8 +15,6 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
     for (let index = 1; index <= paginas; index++) {
         RowsNumber.push(index);
     }
-
-    console.log(datosRows);
 
     const [changeN, setChangeN] = React.useState(20)
 
@@ -41,7 +38,7 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
             tempNumberOfPages = ([1, "...", ...sliced])
         }
         setArrOfCurrButtons(tempNumberOfPages)
-    }, [currentPage])
+    }, [currentPage, paginas])
 
     return (
         <div className="row mx-0 justify-content-around flex-nowrap">
@@ -74,43 +71,6 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
                             )
                         })
                     }
-                    
-                    {/* {page == datosRows.totalPages ?
-                        <>
-                            <li className={`page-item -2 ${Number(page - 2) == Number(datosRows.page) && 'active'}`}><span onClick={() => handlePaginate((Number(page) - 2))} role="button" tabIndex="0" className="page-link">{page - 2}</span></li>
-                            <li className={`page-item -1 ${Number(page - 1) == Number(datosRows.page) && 'active'}`}><span onClick={() => Number(page) == Number(datosRows.pages) ? console.log('Ultima pagina') : handlePaginate((Number(page) - 1))} role="button" tabIndex="0" className="page-link">{page - 1}</span></li>
-                        </>
-                        :
-                        ''
-                    }
-                    {page == (Number(datosRows.totalPages) - 1) ?
-                        <>
-                            <li className={`page-item -1 ${Number(page - 1) == Number(datosRows.page) && 'active'}`}><span onClick={() => Number(page) == Number(datosRows.pages) ? console.log('Ultima pagina') : handlePaginate((Number(page) - 1))} role="button" tabIndex="0" className="page-link">{page - 1}</span></li>
-                        </>
-                        :
-                        ''
-
-                    }
-                    {page &&
-                        <li className={`page-item ${Number(page) == Number(datosRows.page) && 'active'}`}><span onClick={() => handlePaginate(1)} role="button" tabIndex="0" className="page-link">{page}</span></li>
-                    }
-                    {page == datosRows.totalPages ?
-                        ''
-                        :
-                        <>
-                            <li className={`page-item segundo ${Number(page + 2) == Number(datosRows.page) && 'active'}`}><span onClick={() => handlePaginate(2)} role="button" tabIndex="0" className="page-link">{page + 1}</span></li>
-                        </>
-                    }
-
-                    {
-                        page == datosRows.totalPages || page == (Number(datosRows.totalPages) - 1) ?
-                            ''
-                            :
-                            <>
-                                <li className={`page-item tercero ${Number(page + 3) == Number(datosRows.page) && 'active'}`}><span onClick={() => Number(page) == Number(datosRows.pages) ? console.log('Ultima pagina') : handlePaginate(3)} role="button" tabIndex="0" className="page-link">{page + 2}</span></li>
-                            </>
-
-                    } */}
                     <li className="page-item">
                         <span onClick={() => datosRows.hasNextPage && handlePaginateNext(datosRows.nextPage)} role="button" tabIndex="0" className="page-link">&ge;</span>
                     </li>
@@ -120,7 +80,7 @@ function Paginator({ times, datosRows, handlePaginate, handlePaginateNext, handl
                 </ul>
             </nav>
             <div>
-                <Download datosRows={datosRows.docs} times={times} />
+                <Download datosRows={datosRows.docs} />
             </div>
         </div>
     );
@@ -131,10 +91,10 @@ class Download extends React.Component {
     render() {
         return (
             <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
-                <ExcelSheet dataSet={this.props.datosRows} name="Hoja 1">
+                <ExcelSheet data={this.props.datosRows} name="Hoja 1">
                     <ExcelColumn label="Día" value="date" />
                     <ExcelColumn label="NomreCliente" value="nameClient" />
-                    <ExcelColumn label="Vendedor" value="sellerName" />
+                    <ExcelColumn label="Vendedor" value="fullname" />
                     <ExcelColumn label="DNI" value="dniClient" />
                     <ExcelColumn label="N° Celuar" value="celphoneClient" />
                     <ExcelColumn label="Monto Aprobado" value="amountApproved" />
@@ -144,7 +104,6 @@ class Download extends React.Component {
                     <ExcelColumn label="Detalle" value="saleDetail" />
                     <ExcelColumn label="Linea de Credito" value="creditLine" />
                     <ExcelColumn label="Operación" value="typeOperation" />
-                    {/* <ExcelColumn label="timeVenta" value={(col) => col.date ? new Date(col.date).getTime() : col.date} /> */}
                 </ExcelSheet>
             </ExcelFile>
         );
