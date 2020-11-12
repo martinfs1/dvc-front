@@ -130,7 +130,7 @@ class Download extends React.Component {
     render() {
         return (
             <ExcelFile element={<i className="far fa-file-excel text-success"> Excel</i>} filename="excel">
-                <ExcelSheet dataSet={this.props.datosRows} name="Hoja 1">
+                <ExcelSheet data={this.props.datosRows} name="Hoja 1">
                     <ExcelColumn label="Día" value="date" />
                     <ExcelColumn label="NombreCliente" value="nameClient" />
                     <ExcelColumn label="Vendedor" value="fullname" />
