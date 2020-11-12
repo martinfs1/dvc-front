@@ -2,8 +2,8 @@ import React from 'react'
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
-const AdminSaleModal = ({ datos }) => {
-    
+const AdminSaleModal = ({ datos, getDatos }) => {
+
     const [dataName, setDataName] = React.useState([]);
     const [options, setOptions] = React.useState([]);
     const [pdf, setPdf] = React.useState(null);
@@ -25,11 +25,11 @@ const AdminSaleModal = ({ datos }) => {
     }, [dataName]);
 
 
-    const actualizarState = e => {    
+    const actualizarState = e => {
         let texto = e.target.value.toUpperCase();
-          setSellerForm({
+        setSellerForm({
             ...sellerForm, [e.target.name]: texto
-          })
+        })
     }
 
     const crearNuevaVenta = async (e) => {
@@ -53,6 +53,7 @@ const AdminSaleModal = ({ datos }) => {
             });
             resetForm.current.reset();
             cerrarModal.current.click();
+            getDatos()
 
 
         } catch (error) {
@@ -192,7 +193,7 @@ const AdminSaleModal = ({ datos }) => {
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
                                         <label htmlFor="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
-                                        <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
+                                        <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="feeAmount">
                                             <option value={0}>Elegir...</option>
                                             <option value={1}>0</option>
                                             <option value={3}>3</option>
@@ -208,7 +209,7 @@ const AdminSaleModal = ({ datos }) => {
                                         <label htmlFor="montoPorCuota">Monto por cuota *</label>
                                         <input className="form-control"
                                             id="montoPorCuota"
-                                            name="feeAmount"
+                                            name="quotaAmount"
                                             type="text"
                                             onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
@@ -260,7 +261,7 @@ const AdminSaleModal = ({ datos }) => {
                                         type="button"
                                         ref={cerrarModal}
                                     >
-                                    Cerrar
+                                        Cerrar
                                     </button>
                                     <button
                                         type="submit"

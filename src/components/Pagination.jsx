@@ -9,7 +9,7 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
 
     const paginas = datosRows.totalPages;
     const currentPage = datosRows.page;
-    const [ arrOfCurrButtons, setArrOfCurrButtons ] = React.useState([])
+    const [arrOfCurrButtons, setArrOfCurrButtons] = React.useState([])
 
     const RowsNumber = [];
     for (let index = 1; index <= paginas; index++) {
@@ -29,12 +29,12 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
         } else if (currentPage === 4) {
             const sliced = RowsNumber.slice(0, 5)
             tempNumberOfPages = [...sliced, "...", RowsNumber.length]
-        } else if (currentPage > 4 && currentPage < RowsNumber.length -2) {
-            const sliced1 = RowsNumber.slice(currentPage -2, currentPage);
-            const sliced2 = RowsNumber.slice(currentPage, currentPage +1);
+        } else if (currentPage > 4 && currentPage < RowsNumber.length - 2) {
+            const sliced1 = RowsNumber.slice(currentPage - 2, currentPage);
+            const sliced2 = RowsNumber.slice(currentPage, currentPage + 1);
             tempNumberOfPages = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
-        } else if (currentPage > RowsNumber.length -3) {
-            const sliced = RowsNumber.slice(RowsNumber.length -4);
+        } else if (currentPage > RowsNumber.length - 3) {
+            const sliced = RowsNumber.slice(RowsNumber.length - 4);
             tempNumberOfPages = ([1, "...", ...sliced])
         }
         setArrOfCurrButtons(tempNumberOfPages)
@@ -58,16 +58,15 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
                     </li>
                     {
                         arrOfCurrButtons.map(p => {
-                            return(
-                                <li className={`page-item ${
-                                    currentPage == p && 'active'}`}>
-                                    <span onClick={() => handlePaginate(p)} 
-                                    role="button" 
-                                    tabIndex="0" 
-                                    className="page-link">
+                            return (
+                                <li className={`page-item ${currentPage == p && 'active'}`}>
+                                    <span onClick={() => handlePaginate(p)}
+                                        role="button"
+                                        tabIndex="0"
+                                        className="page-link">
                                         {p}
                                     </span>
-                                </li>       
+                                </li>
                             )
                         })
                     }
@@ -87,7 +86,7 @@ function Paginator({ datosRows, handlePaginate, handlePaginateNext, handlePagina
 }
 
 class Download extends React.Component {
-    
+
     render() {
         return (
             <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
@@ -96,13 +95,13 @@ class Download extends React.Component {
                     <ExcelColumn label="NomreCliente" value="nameClient" />
                     <ExcelColumn label="Vendedor" value="fullname" />
                     <ExcelColumn label="DNI" value="dniClient" />
-                    <ExcelColumn label="N° Celuar" value="celphoneClient" />
+                    <ExcelColumn label="N° Celular" value="celphoneClient" />
                     <ExcelColumn label="Monto Aprobado" value="amountApproved" />
                     <ExcelColumn label="Cuotas" value="feeAmount" />
                     <ExcelColumn label="Monto Cuotas" value="quotaAmount" />
                     <ExcelColumn label="Cliente Nuevo" value="newClient" />
                     <ExcelColumn label="Detalle" value="saleDetail" />
-                    <ExcelColumn label="Linea de Credito" value="creditLine" />
+                    <ExcelColumn label="Linea de Crédito" value="creditLine" />
                     <ExcelColumn label="Operación" value="typeOperation" />
                 </ExcelSheet>
             </ExcelFile>

@@ -6,13 +6,20 @@ function ModalRegAdminSeller() {
 
     const [typeReg, setTypeReg] = React.useState('Vendedor');
     const [regData, setRegData] = React.useState({});
+    const form = React.useRef();
 
     const regHandler = async () => {
         try {
-            typeReg !== 'Vendedor' ? 
-            await clienteAxios.post('api/v1/regadmin', regData) 
-            :
-            await clienteAxios.post('api/v1/regseller', regData)
+            typeReg !== 'Vendedor' ?
+                await clienteAxios.post('api/v1/regadmin', regData)
+                :
+                await clienteAxios.post('api/v1/regseller', regData)
+            Swal.fire({
+                title: `${typeReg} Creado exitosamente`,
+                icon: 'Success'
+            })
+            form.current.reset();
+
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -22,6 +29,7 @@ function ModalRegAdminSeller() {
             })
         }
     }
+    console.log(typeReg);
 
     const changeHandler = (e) => {
         setRegData({ ...regData, [e.target.name]: e.target.value })
@@ -37,7 +45,7 @@ function ModalRegAdminSeller() {
                     <div className="modal-content">
                         <div className="mt-3">
                             <div className="row justify-content-between w-100 mx-0 px-4">
-                                <h5>Registro { typeReg }</h5>
+                                <h5>Registro {typeReg}</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -50,12 +58,12 @@ function ModalRegAdminSeller() {
                                     Administrador
                                 </li>
                             </ul>
-                            <hr/>
+                            <hr />
                         </div>
                         <div className="modal-body">
                             <div className="tab-content" id="pills-tabContent">
                                 <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                    <form>
+                                    <form ref={form}>
                                         <div className="form-group row mt-2">
                                             <div className="col">
                                                 <label htmlFor="nombre">Nombre *</label>
@@ -66,7 +74,7 @@ function ModalRegAdminSeller() {
                                                 <input type="text" id="dni" onChange={changeHandler} className="form-control" placeholder="DNI" name="dni" />
                                             </div>
                                         </div>
-                                        <div className="form-group mt-2">                                       
+                                        <div className="form-group mt-2">
                                             <label htmlFor="email">Email *</label>
                                             <input type="email" id="email" onChange={changeHandler} className="form-control" placeholder="ejemplo@ejemplo.com" name="email" />
                                         </div>

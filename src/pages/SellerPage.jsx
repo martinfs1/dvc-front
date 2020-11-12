@@ -8,7 +8,6 @@ const SellerPage = () => {
   const [sales, setSales] = useState([]);
   const [saleShow, setSaleShow] = useState([]);
   const [sellerName, setSellerName] = useState("");
-  const [nuevaVenta, setNuevaVenta] = useState(true)
 
   const fecha = new Date();
 
@@ -20,25 +19,23 @@ const SellerPage = () => {
       const { response } = error;
       console.log(response);
     }
-  }  
-  
+  }
+
   const ventasMes = () => {
-    const actual = fecha.toLocaleString('default', { month: '2-digit' }) + '/' + fecha.toLocaleString('default', { year: 'numeric' });
-    let ventas = sales.filter(m => { return m.month.toLowerCase().includes(actual) });
+    const actual = fecha.toLocaleString('default', { month: 'long' });
+    console.log(actual);
+    let ventas = sales.filter(m => { return m.exactMonth.includes(actual) });
     setSaleShow(ventas);
+    console.log(ventas);
+
   }
 
-  const funcNuevaVenta = () => {
-    setNuevaVenta(!nuevaVenta);
-  }
 
-  console.log(sales);
-  
   useEffect(() => {
     setSellerName(localStorage.getItem('username'))
     getDatos();
-  }, [nuevaVenta]);
-  
+  }, []);
+
   useEffect(() => {
     ventasMes();
   }, [sales]);
@@ -92,7 +89,7 @@ const SellerPage = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item">
-                <SellerModal funcNuevaVenta={funcNuevaVenta} />
+                <SellerModal getDatos={getDatos} />
               </li>
             </ul>
             <form className="form-inline my-2 my-sm-0">
@@ -104,13 +101,16 @@ const SellerPage = () => {
                 onChange={search}
               />
             </form>
+            {/* <div>
+              <span className="">Ventas Total del mes: $127.000</span>
+            </div> */}
           </div>
         </nav>
       </div>
 
-      <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
       <div className="container">
         <div className="row justify-content-around">
+          <h2 className="my-1 text-center display-4">Ventas del corriente mes</h2>
           {ventas}
         </div>
       </div>
