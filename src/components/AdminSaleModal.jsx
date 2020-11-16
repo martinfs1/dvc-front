@@ -90,6 +90,8 @@ const AdminSaleModal = ({ datos, getDatos }) => {
         }
     }
 
+    console.log(sellerForm);
+
     return (
         <>
             <div className="modal fade"
@@ -230,7 +232,7 @@ const AdminSaleModal = ({ datos, getDatos }) => {
                                     </div>
                                     <div className="form-group col-sm-6">
                                         <label htmlFor="vendedor" className="col-form-label">Vendedor *</label>
-                                        <select id="vendedor" className="form-control" onChange={actualizarState} name="sellerName">
+                                        <select id="vendedor" name="fullname" className="form-control" onChange={actualizarState}>
                                             <option selected disabled>Elegir...</option>
                                             {options}
                                         </select>

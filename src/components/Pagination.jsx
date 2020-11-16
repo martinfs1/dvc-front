@@ -5,10 +5,10 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page, tablasChange }) {
+function Paginator({ datosRowsSales, datosRowsSellers, montosTotalesShow, datosShow, handlePaginate, handlePaginateNext, handlePaginatePrev, handleChangeRows, page, tablasChange }) {
 
-    const paginas = datosRows.totalPages;
-    const currentPage = datosRows.page;
+    const paginas = tablasChange ? datosRowsSales.totalPages : datosRowsSellers.totalPages;
+    const currentPage = tablasChange ? datosRowsSales.page : datosRowsSellers.page;
     const [arrOfCurrButtons, setArrOfCurrButtons] = React.useState([])
 
     const RowsNumber = [];
@@ -39,22 +39,25 @@ function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, ha
         }
         setArrOfCurrButtons(tempNumberOfPages)
 
-        // let tempNumberOfPages = [...RowsNumber]
-        // if (currentPage >= 1 && currentPage <= 3 && paginas >= 2) {
-        //     tempNumberOfPages = [1, 2, 3, 4, '...', RowsNumber.length]
-        // } else if (currentPage === 4) {
-        //     const sliced = RowsNumber.slice(0, 5)
-        //     tempNumberOfPages = [...sliced, "...", RowsNumber.length]
-        // } else if (currentPage > 4 && currentPage < RowsNumber.length - 2) {
-        //     const sliced1 = RowsNumber.slice(currentPage - 2, currentPage);
-        //     const sliced2 = RowsNumber.slice(currentPage, currentPage + 1);
-        //     tempNumberOfPages = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
-        // } else if (currentPage > RowsNumber.length - 3) {
-        //     const sliced = RowsNumber.slice(RowsNumber.length - 4);
-        //     tempNumberOfPages = ([...sliced])
-        // }
-        // setArrOfCurrButtons(tempNumberOfPages)
+        let tempNumberOfPagesSellers = [...RowsNumber]
+        if (currentPage >= 1 && currentPage <= 3 && paginas > 2) {
+            tempNumberOfPagesSellers = [1, 2, 3, 4, '...', RowsNumber.length]
+        } else if (currentPage === 4) {
+            const sliced = RowsNumber.slice(0, 5)
+            tempNumberOfPagesSellers = [...sliced, "...", RowsNumber.length]
+        } else if (currentPage > 4 && currentPage < RowsNumber.length - 2) {
+            const sliced1 = RowsNumber.slice(currentPage - 2, currentPage);
+            const sliced2 = RowsNumber.slice(currentPage, currentPage + 1);
+            tempNumberOfPagesSellers = ([1, "...", ...sliced1, sliced2, "...", RowsNumber.length])
+        } else if (currentPage > RowsNumber.length - 3) {
+            const sliced = RowsNumber.slice(RowsNumber.length - 4);
+            tempNumberOfPagesSellers = ([...sliced])
+        }
+        setArrOfCurrButtons(tempNumberOfPagesSellers)
     }, [currentPage, paginas])
+
+    console.log(datosRowsSellers.hasPrevPage);
+    console.log(datosRowsSellers.prevPage);
 
     return (
         <div className="row mx-0 justify-content-around flex-nowrap">
@@ -62,7 +65,7 @@ function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, ha
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-                <option value={datosRows.totalDocs}>Todo</option>
+                <option value={datosRowsSales.totalDocs}>Todo</option>
             </select>
             <nav aria-label="...">
                 <ul className="pagination pagination-sm">
@@ -70,9 +73,9 @@ function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, ha
                         <span onClick={() => page == 1 ? '' : handlePaginate(1)} role="button" tabIndex="0" className="page-link">&le;&le;</span>
                     </li>
                     <li className="page-item">
-                        <span onClick={() => datosRows.prevPage && handlePaginatePrev(datosRows.prevPage)} role="button" tabIndex="0" className="page-link">&le;</span>
+                        <span onClick={() => tablasChange ? datosRowsSales.hasPrevPage && handlePaginatePrev(datosRowsSales.prevPage) : datosRowsSellers.hasPrevPage && handlePaginatePrev(datosRowsSellers.prevPage)} role="button" tabIndex="0" className="page-link">&le;</span>
                     </li>
-                    {   tablasChange ?
+                    {   
                         arrOfCurrButtons.map(p => {
                             return (
                                 <li className={`page-item ${currentPage == p && 'active'}`}>
@@ -86,14 +89,12 @@ function Paginator({ datosRows, montosTotalesShow, datosShow, handlePaginate, ha
                                 </li>
                             )
                         })
-                        :
-                        ''
                     }
                     <li className="page-item">
-                        <span onClick={() => datosRows.hasNextPage && handlePaginateNext(datosRows.nextPage)} role="button" tabIndex="0" className="page-link">&ge;</span>
+                        <span onClick={() => tablasChange ? datosRowsSales.hasNextPage && handlePaginateNext(datosRowsSales.nextPage) : datosRowsSellers.hasNextPage && handlePaginateNext(datosRowsSellers.nextPage)} role="button" tabIndex="0" className="page-link">&ge;</span>
                     </li>
                     <li>
-                        <span onClick={() => handlePaginate(datosRows.totalPages)} role="button" tabIndex="0" className="page-link">&ge;&ge;</span>
+                        <span onClick={() => tablasChange ? handlePaginate(datosRowsSales.totalPages) : handlePaginate(datosRowsSellers.totalPages)} role="button" tabIndex="0" className="page-link">&ge;&ge;</span>
                     </li>
                 </ul>
             </nav>
@@ -130,9 +131,10 @@ class Download extends React.Component {
                         :
                         <ExcelFile element={<i className="far fa-file-excel text-success" type="button" tabIndex="-1"> Excel</i>} filename="excel">
                             <ExcelSheet data={this.props.montosTotalesShow} name="Hoja 2">
+                                <ExcelColumn label="Año" value="year" />
                                 <ExcelColumn label="Nombre Vendedor" value={(col) => col.seller.fullname} />
-                                <ExcelColumn label="DNI" value={(col) => Number(col.seller.dni)} />
-                                <ExcelColumn label="Venta Total" value={(col) => parseInt(col.annualAmountApproved)} />
+                                <ExcelColumn label="DNI" value={(col) => col.seller.dni} />
+                                <ExcelColumn label="Venta Total" value={(col) => col.annualAmountApproved} />
                                 <ExcelColumn label="Enero" value="enero" />
                                 <ExcelColumn label="Febrero" value="febrero" />
                                 <ExcelColumn label="Marzo" value="marzo" />

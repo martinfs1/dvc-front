@@ -5,6 +5,7 @@ import App from './App';
 import auth from '../src/utils/auth';
 import clienteAxios from './config/axios';
 import Sweet from 'sweetalert2';
+import { BrowserRouter } from 'react-router-dom';
 
 clienteAxios.interceptors.request.use(config => {
   if (auth.isAuthenticated()) {
@@ -31,10 +32,11 @@ clienteAxios.interceptors.response.use(
     return Promise.reject(error);
   });
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const rootElement = document.getElementById("root");
+
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrate(<BrowserRouter basename={process.env.PUBLIC_URL}><App /></BrowserRouter>, rootElement);
+} else {
+  ReactDOM.render(<BrowserRouter basename={process.env.PUBLIC_URL}><App /></BrowserRouter>, rootElement);
+}
 

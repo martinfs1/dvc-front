@@ -29,37 +29,42 @@ export default function Panel() {
     // Paginacion 
     const [limit, setLimit] = React.useState(20);
     const [page, setPage] = React.useState(1);
-    const [datosRows, setDatosRows] = React.useState([]);
-    const [params, setParams] = React.useState({ enable: 'SI' })
+    const [datosRowsSales, setDatosRowsSales] = React.useState([]);
+    const [datosRowsSellers, setDatosRowsSellers] = React.useState([]);
+    const [paramsSales, setParamsSales] = React.useState({ enable: 'SI' })
+    const [paramsSellers, setParamsSellers] = React.useState({ enable: 'SI' })
 
 
     const getDatos = async () => {
         try {
-            const sellers = await clienteAxios.get(`api/v1/allseller`);
-            const amountTotals = await clienteAxios.get(`api/v1/montosales`, {
+            const sellers = await clienteAxios.get(`api/v1/allseller`, {
                 params: {
-
+                    page: page,
+                    limit: limit,
+                    ...paramsSellers
                 }
             });
+            const amountTotals = await clienteAxios.get(`api/v1/montosales`);
             const ventas = await clienteAxios.get(`api/v1/allsales`, {
                 params: {
                     page: page,
                     limit: limit,
-                    ...params
+                    ...paramsSales
                 }
             })
-
+            console.log(sellers.data);
             setMontosTotales(amountTotals.data);
             setMontosTotalesShow(amountTotals.data);
 
             // TablesSales
             setSellerDatos(sellers.data.docs);
             setdatosSellerShow(sellers.data.docs);
+            setDatosRowsSellers(sellers.data);
 
             //TablesSales    
             setdatosShow(ventas.data.docs);
             setUserDatos(ventas.data.docs);
-            setDatosRows(ventas.data);
+            setDatosRowsSales(ventas.data);
 
         } catch (error) {
             const { response } = error;
@@ -143,90 +148,6 @@ export default function Panel() {
         setMontosTotalesShow(sortdatos);
     }
 
-    const sortEnero = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.enero - a.enero))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.enero - a.enero))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortFebrero = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.febrero - a.febrero))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.febrero - a.febrero))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortMarzo = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.marzo - a.marzo))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.marzo - a.marzo))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortAbril = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.abril - a.abril))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.abril - a.abril))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortMayo = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.mayo - a.mayo))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.mayo - a.mayo))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortJunio = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.junio - a.junio))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.junio - a.junio))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortJulio = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.julio - a.julio))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.julio - a.julio))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortAgosto = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.agosto - a.agosto))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.agosto - a.agosto))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortSeptiembre = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.septiembre - a.septiembre))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.septiembre - a.septiembre))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortOctubre = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.octubre - a.octubre))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.octubre - a.octubre))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortNoviembre = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.noviembre - a.noviembre))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.noviembre - a.noviembre))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
-    const sortDiciembre = () => {
-        let sortDatosAmount = [...montosTotales].sort((a, b) => (b.diciembre - a.diciembre))
-        if (sortDatosAmount[0] === montosTotalesShow[0])
-            sortDatosAmount = [...montosTotales].sort((b, a) => (b.diciembre - a.diciembre))
-        setMontosTotalesShow(sortDatosAmount)
-    }
-
     const search = (e) => {
         const Filtrados = [];
         let texto = e.target.value.toUpperCase();
@@ -243,7 +164,7 @@ export default function Panel() {
 
     React.useEffect(() => {
         getDatos();
-    }, [limit, page, params.enable]);
+    }, [limit, page, paramsSales.enable, paramsSellers.enable]);
 
     // Paginate
 
@@ -252,22 +173,36 @@ export default function Panel() {
     }
 
     const handlePaginateNext = (n) => {
-        datosRows.hasNextPage && setPage(n);
+        tablasChange ? datosRowsSales.hasNextPage && setPage(n) 
+        :
+        datosRowsSellers.hasNextPage && setPage(n);
     }
 
     const handlePaginatePrev = (n) => {
-        datosRows.hasPrevPage && setPage(n);
+        tablasChange ? datosRowsSales.hasPrevPage && setPage(n) 
+        :
+        datosRowsSellers.hasPrevPage && setPage(n);
     }
 
-    const parameterHandler = (e) => {
+    const parameterSalesHandler = (e) => {
         let texto = e.target.value.toUpperCase();
-        setParams({ ...params, [e.target.name]: texto });
+        setParamsSales({ ...paramsSales, [e.target.name]: texto });
+    }
+
+    const parameterSellerHandler = (e) => {
+        let texto = e.target.value.toUpperCase();
+        setParamsSellers({ ...paramsSellers, [e.target.name]: texto });
     }
 
     const enterSearch = (e) => {
-        if (params[e.target.name] === '') {
+        if (paramsSales[e.target.name] === '') {
             if (e.target.value.length < 1) {
-                delete params[e.target.name]
+                delete paramsSales[e.target.name]
+            }
+        }
+        if (paramsSellers[e.target.name] === '') {
+            if (e.target.value.length < 1) {
+                delete paramsSellers[e.target.name]
             }
         }
         if (e.keyCode === 13) {
@@ -293,8 +228,10 @@ export default function Panel() {
 
     const deleteSaleHandler = async (props) => {
         try {
-            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: "NO" });
-            getDatos()
+            tablasChange ?
+            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, {enable: props.enable === "SI" ? "NO" : "SI"})
+            :
+            await clienteAxios.put(`api/v1/sellerupdate/${props._id}`, {enable: props.enable === "SI" ? "NO" : "SI"})
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -327,43 +264,43 @@ export default function Panel() {
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortDia}>Día</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="date" placeholder='Día...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="date" placeholder='Día...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortNombre}>Nombre Cliente</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="nameClient" placeholder='Nombre...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="nameClient" placeholder='Nombre...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortDNI}>DNI</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="dniClient" placeholder='DNI...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="dniClient" placeholder='DNI...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0">Teléfono</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="celphoneClient" placeholder='Teléfono...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="celphoneClient" placeholder='Teléfono...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortNombreSeller}>Vendedor</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="fullname" placeholder='Vendedor...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="fullname" placeholder='Vendedor...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortNombre}>Tipo Venta</p>
-                                                <input className="form-control" onChange={parameterHandler} onKeyUp={enterSearch} name="creditLine" placeholder='Tipo Venta...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} onKeyUp={enterSearch} name="creditLine" placeholder='Tipo Venta...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
                                                 <p className="mb-0" onClick={sortAmount}>Venta</p>
-                                                <input className="form-control" onChange={parameterHandler} name="amountApproved" onKeyUp={enterSearch} placeholder='Venta...' />
+                                                <input className="form-control" onChange={parameterSalesHandler} name="amountApproved" onKeyUp={enterSearch} placeholder='Venta...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky px-1" onClick={sortNombre}>
@@ -372,7 +309,7 @@ export default function Panel() {
                                         </th>
                                         <th className="py-0 px-0 position-sticky"><p className="text-center">Cuotas</p></th>
                                         <th className="py-0 position-sticky">
-                                            <select className="custom-select-sm mb-3 rounded" name="enable" onChange={parameterHandler} as="select">
+                                            <select className="custom-select-sm mb-3 rounded" name="enable" onChange={parameterSalesHandler} as="select">
                                                 <option selected value="SI">Habilitado</option>
                                                 <option value="NO">Deshabilitado</option>
                                             </select>
@@ -384,35 +321,40 @@ export default function Panel() {
                                     <>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortDiaS}>Año</p>
-                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="year" placeholder='Año...' />
+                                                <p className="mb-0" onClick={sortNombreS}>Vendedor</p>
+                                                <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="fullname" placeholder='Nombre...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1" colSpan="3">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortNombreS}>Vendedor</p>
-                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="fullname" placeholder='Vendedor...' />
+                                                <p className="mb-0" onClick={sortDNISe}>DNI</p>
+                                                <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="dni" placeholder='DNI...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortDNISe}>DNI</p>
-                                                <input className="form-control" onChange={search} onKeyUp={enterSearch} name="dni" placeholder='DNI...' />
+                                                <p className="mb-0" onClick={sortDiaS}>Email</p>
+                                                <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="email" placeholder='Email...' />
                                             </div>
                                         </th>
-                                        <th className="position-sticky text-nowrap text-center px-1">Venta Total</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortEnero}>Enero</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortFebrero}>Febrero</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortMarzo}>Marzo</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortAbril}>Abril</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortMayo}>Mayo</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortJunio}>Junio</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortJulio}>Julio</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortAgosto}>Agosto</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortSeptiembre}>Septiembre</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortOctubre}>Octubre</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortNoviembre}>Noviembre</th>
-                                        <th className="position-sticky text-nowrap text-center px-1" onClick={sortDiciembre}>Diciembre</th>
+                                        <th className="py-0 position-sticky text-nowrap text-center">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDiaS}>N° Celular</p>
+                                                <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="celphone" placeholder='N° Celular...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky text-nowrap text-center">
+                                            <div className="row justify-content-center mx-0 input-group-sm pb-2">
+                                                <p className="mb-0" onClick={sortDiaS}>Domicilio</p>
+                                                <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="address" placeholder='Domicilio...' />
+                                            </div>
+                                        </th>
+                                        <th className="py-0 position-sticky">
+                                            <select className="custom-select-sm mb-3 rounded" name="enable" onChange={parameterSellerHandler} as="select">
+                                                <option selected value="SI">Habilitado</option>
+                                                <option value="NO">Deshabilitado</option>
+                                            </select>
+                                        </th>
                                         <th className="position-sticky text-nowrap text-center px-1">Accion</th>
                                     </>
 
@@ -432,7 +374,7 @@ export default function Panel() {
                     </tbody>
                 </table>
             </div>
-            <Pagination datosRows={datosRows} datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
+            <Pagination datosRowsSales={datosRowsSales} datosRowsSellers={datosRowsSellers} datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
         </div>
     );
 }
