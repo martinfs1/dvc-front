@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/dvc/static/css/main.ccafe842.chunk.css",
-    "main.js": "/dvc/static/js/main.900dd68f.chunk.js",
-    "main.js.map": "/dvc/static/js/main.900dd68f.chunk.js.map",
-    "runtime-main.js": "/dvc/static/js/runtime-main.b628ea86.js",
-    "runtime-main.js.map": "/dvc/static/js/runtime-main.b628ea86.js.map",
-    "static/js/2.3e7f86b1.chunk.js": "/dvc/static/js/2.3e7f86b1.chunk.js",
-    "static/js/2.3e7f86b1.chunk.js.map": "/dvc/static/js/2.3e7f86b1.chunk.js.map",
-    "static/js/3.8465f2c6.chunk.js": "/dvc/static/js/3.8465f2c6.chunk.js",
-    "static/js/3.8465f2c6.chunk.js.map": "/dvc/static/js/3.8465f2c6.chunk.js.map",
-    "index.html": "/dvc/index.html",
-    "precache-manifest.4ca762f099709688bee9614396a469b7.js": "/dvc/precache-manifest.4ca762f099709688bee9614396a469b7.js",
-    "service-worker.js": "/dvc/service-worker.js",
-    "static/css/main.ccafe842.chunk.css.map": "/dvc/static/css/main.ccafe842.chunk.css.map",
-    "static/js/2.3e7f86b1.chunk.js.LICENSE.txt": "/dvc/static/js/2.3e7f86b1.chunk.js.LICENSE.txt",
-    "static/media/marca-blanca.png": "/dvc/static/media/marca-blanca.671e4272.png"
+    "main.css": "/marcobaiad/dvc/static/css/main.ccafe842.chunk.css",
+    "main.js": "/marcobaiad/dvc/static/js/main.02cc6880.chunk.js",
+    "main.js.map": "/marcobaiad/dvc/static/js/main.02cc6880.chunk.js.map",
+    "runtime-main.js": "/marcobaiad/dvc/static/js/runtime-main.0895621b.js",
+    "runtime-main.js.map": "/marcobaiad/dvc/static/js/runtime-main.0895621b.js.map",
+    "static/js/2.3e7f86b1.chunk.js": "/marcobaiad/dvc/static/js/2.3e7f86b1.chunk.js",
+    "static/js/2.3e7f86b1.chunk.js.map": "/marcobaiad/dvc/static/js/2.3e7f86b1.chunk.js.map",
+    "static/js/3.8465f2c6.chunk.js": "/marcobaiad/dvc/static/js/3.8465f2c6.chunk.js",
+    "static/js/3.8465f2c6.chunk.js.map": "/marcobaiad/dvc/static/js/3.8465f2c6.chunk.js.map",
+    "index.html": "/marcobaiad/dvc/index.html",
+    "precache-manifest.5ba9dadb40bf4f1f456419f98143784a.js": "/marcobaiad/dvc/precache-manifest.5ba9dadb40bf4f1f456419f98143784a.js",
+    "service-worker.js": "/marcobaiad/dvc/service-worker.js",
+    "static/css/main.ccafe842.chunk.css.map": "/marcobaiad/dvc/static/css/main.ccafe842.chunk.css.map",
+    "static/js/2.3e7f86b1.chunk.js.LICENSE.txt": "/marcobaiad/dvc/static/js/2.3e7f86b1.chunk.js.LICENSE.txt",
+    "static/media/marca-blanca.png": "/marcobaiad/dvc/static/media/marca-blanca.671e4272.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.b628ea86.js",
+    "static/js/runtime-main.0895621b.js",
     "static/js/2.3e7f86b1.chunk.js",
     "static/css/main.ccafe842.chunk.css",
-    "static/js/main.900dd68f.chunk.js"
+    "static/js/main.02cc6880.chunk.js"
   ]
 }
