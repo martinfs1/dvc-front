@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/delvallecredito/precache-manifest.f0132dbe961b9c0acdd667770374b6f5.js"
+  "/delvallecredito/precache-manifest.dc8d0e763351cb5899a8104c31e64244.js"
 );
 
 self.addEventListener('message', (event) => {
