@@ -15,7 +15,7 @@ export default function Administracion() {
         try {
             await clienteAxios.get(`/api/v1/logout`);
             auth.logOut();
-            window.location = '/dvc';
+            window.location = '/dvcs/';
         } catch (e) {
             const { response } = e;
             if (response.data.error && response.data.error.includes('expired')) {
