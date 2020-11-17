@@ -77,8 +77,9 @@ const Login = () => {
               className="form-control"
               id="inputPassword"
               name="password"
-              // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               placeholder="Contraseña"
+              title="La contraseña debe tener al menos 8 caracteres, una mayuscula y una minúscula"
               onChange={(e) => { setPassword(e.target.value) }}
               required
             />
