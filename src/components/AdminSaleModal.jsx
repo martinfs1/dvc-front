@@ -161,6 +161,7 @@ const AdminSaleModal = ({ datos, getDatos }) => {
                                             id="dniCLiente"
                                             name="dniClient"
                                             maxLength="8"
+                                            minLength="7"
                                             type="text"
                                             onKeyPress={OnlyNumber}
                                             onChange={actualizarState}

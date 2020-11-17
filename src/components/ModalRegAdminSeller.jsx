@@ -7,6 +7,7 @@ function ModalRegAdminSeller() {
     const [typeReg, setTypeReg] = React.useState('Vendedor');
     const [regData, setRegData] = React.useState({});
     const form = React.useRef();
+    const btnCerrar = React.useRef();
 
     const regHandler = async () => {
         try {
@@ -19,12 +20,13 @@ function ModalRegAdminSeller() {
                 icon: 'Success'
             })
             form.current.reset();
-
+            btnCerrar.current.click();
         } catch (error) {
             const { response } = error;
             console.log(response);
             Swal.fire({
                 title: `No se pudo crear el ${typeReg}`,
+                text: `Por favor intente de nuevo más tarde`,
                 icon: 'error'
             })
         }
@@ -45,7 +47,7 @@ function ModalRegAdminSeller() {
                         <div className="mt-3">
                             <div className="row justify-content-between w-100 mx-0 px-4">
                                 <h5>Registro {typeReg}</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" ref={btnCerrar} className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -70,7 +72,7 @@ function ModalRegAdminSeller() {
                                             </div>
                                             <div className="col">
                                                 <label htmlFor="dni">DNI *</label>
-                                                <input type="text" id="dni" onChange={changeHandler} className="form-control" placeholder="DNI" name="dni" />
+                                                <input type="text" maxLength="8" minLength="7" id="dni" onChange={changeHandler} className="form-control" placeholder="DNI" name="dni" />
                                             </div>
                                         </div>
                                         <div className="form-group mt-2">
@@ -90,11 +92,11 @@ function ModalRegAdminSeller() {
                                         <div className="form-group row mt-2">
                                             <div className="col">
                                                 <label htmlFor="user">Usuario *</label>
-                                                <input type="text" id="user" onChange={changeHandler} className="form-control" placeholder="Nombre de Usuario" name="user" />
+                                                <input type="text" id="user" maxLength="10" minLength="4" onChange={changeHandler} className="form-control" placeholder="Nombre de Usuario" name="user" />
                                             </div>
                                             <div className="col">
                                                 <label htmlFor="password">Contraseña *</label>
-                                                <input type="password" id="password" onChange={changeHandler} className="form-control" placeholder="Contraseña" name="password" />
+                                                <input type="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onChange={changeHandler} className="form-control" placeholder="Contraseña" name="password" />
                                             </div>
                                         </div>
 

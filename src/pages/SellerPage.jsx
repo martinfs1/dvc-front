@@ -98,6 +98,7 @@ const SellerPage = () => {
                 placeholder="DNI Cliente"
                 aria-label="Search"
                 maxLength='8'
+                minLength='7'
                 onChange={search}
               />
             </form>

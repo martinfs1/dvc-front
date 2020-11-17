@@ -64,17 +64,6 @@ function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerSh
         })
     }
 
-    const arrays = []
-
-    for (let datos of datosSellerShow) {
-        const element = datos.sales
-        // console.log(element);
-        // for (let i of element) {
-        //     // const datoss = element[i]
-        //     arrays.push(i);
-        // }
-    }
-
     return (
         <>
             {

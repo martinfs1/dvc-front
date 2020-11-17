@@ -52,7 +52,6 @@ export default function Panel() {
                     ...paramsSales
                 }
             })
-            console.log(sellers.data);
             setMontosTotales(amountTotals.data);
             setMontosTotalesShow(amountTotals.data);
 
@@ -120,32 +119,24 @@ export default function Panel() {
     // Sort's Table Sellers
 
     const sortNombreS = () => {
-        let sortdatos = [...montosTotales].sort((a, b) => (a.seller.fullname > b.seller.fullname ? 1 : a.seller.fullname < b.seller.fullname ? -1 : 0))
-        if (sortdatos[0] === montosTotalesShow[0])
-            sortdatos = [...montosTotales].sort((b, a) => (a.seller.fullname > b.seller.fullname ? 1 : a.seller.fullname < b.seller.fullname ? -1 : 0))
-        setMontosTotalesShow(sortdatos);
+        let sortdatos = [...sellerDatos].sort((a, b) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
+        if (sortdatos[0] === datosSellerShow[0])
+            sortdatos = [...sellerDatos].sort((b, a) => (a.fullname > b.fullname ? 1 : a.fullname < b.fullname ? -1 : 0))
+        setdatosSellerShow(sortdatos);
     }
 
     const sortDNISe = () => {
-        let sortdatos = [...montosTotales].sort((a, b) => (b.seller.dni - a.seller.dni))
-        if (sortdatos[0] === montosTotalesShow[0])
-            sortdatos = [...montosTotales].sort((b, a) => (b.seller.dni - a.seller.dni))
-        setMontosTotalesShow(sortdatos);
+        let sortdatos = [...sellerDatos].sort((a, b) => (b.dni - a.dni))
+        if (sortdatos[0] === datosSellerShow[0])
+            sortdatos = [...sellerDatos].sort((b, a) => (b.dni - a.dni))
+        setdatosSellerShow(sortdatos);
     }
 
-    const sortDiaS = () => {
-        let sortdatos = [...montosTotales].sort(function (a, b) {
-            return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
-        })
-        if (sortdatos[0] === montosTotalesShow[0])
-            sortdatos = [...montosTotales].sort(function (b, a) {
-                return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
-            })
-        if (sortdatos[0] === montosTotalesShow[0])
-            sortdatos = [...montosTotales].sort(function (b, a) {
-                return (a.year > b.year ? 1 : a.year < b.year ? -1 : 0)
-            })
-        setMontosTotalesShow(sortdatos);
+    const sortEmails = () => {
+        let sortdatos = [...sellerDatos].sort((a, b) => (a.email > b.email ? 1 : a.email < b.email ? -1 : 0))
+        if (sortdatos[0] === datosSellerShow[0])
+            sortdatos = [...sellerDatos].sort((b, a) => (a.email > b.email ? 1 : a.email < b.email ? -1 : 0))
+        setdatosSellerShow(sortdatos);
     }
 
     const search = (e) => {
@@ -184,6 +175,10 @@ export default function Panel() {
         datosRowsSellers.hasPrevPage && setPage(n);
     }
 
+    const handleChangeRows = (n) => {
+        setLimit(n);
+    }
+
     const parameterSalesHandler = (e) => {
         let texto = e.target.value.toUpperCase();
         setParamsSales({ ...paramsSales, [e.target.name]: texto });
@@ -213,10 +208,6 @@ export default function Panel() {
 
     // Fin Paginate
 
-    const handleChangeRows = (n) => {
-        setLimit(n);
-    }
-
     const onClickHandler = (datoFila) => {
         setFila(datoFila);
     }
@@ -238,14 +229,75 @@ export default function Panel() {
         }
     }
 
+    const annual = []
+    const month = []
+    
+    const mes = new Date().toLocaleString('default', { month: 'long' })
+    const año = new Date().toLocaleString('default', { year: 'numeric' })
+    
+
+    for (let monto of montosTotales) {
+        const annualsAmmounts = monto.annualAmountApproved;
+        const monthAmmountsEnero = monto.enero;
+        const monthAmmountsFebrero = monto.febrero;
+        const monthAmmountsMarzo = monto.marzo;
+        const monthAmmountsAbril = monto.abril;
+        const monthAmmountsMayo = monto.mayo;
+        const monthAmmountsJunio = monto.junio;
+        const monthAmmountsJulio = monto.julio;
+        const monthAmmountsAgosto = monto.agosto;
+        const monthAmmountsSeptiembre = monto.septiembre;
+        const monthAmmountsOctubre = monto.octubre;
+        const monthAmmountsNoviembre = monto.noviembre;
+        const monthAmmountsDiciembre = monto.diciembre;
+        if (año == monto.year) {
+            annual.push(annualsAmmounts);
+        }
+        if (mes == "enero" && monto.year == año) {
+            month.push(monthAmmountsEnero)
+        }
+        if (mes == "febrero" && monto.year == año) {
+            month.push(monthAmmountsFebrero)
+        }
+        if (mes == "marzo" && monto.year == año) {
+            month.push(monthAmmountsMarzo)
+        }
+        if (mes == "abril" && monto.year == año) {
+            month.push(monthAmmountsAbril)
+        }
+        if (mes == "mayo" && monto.year == año) {
+            month.push(monthAmmountsMayo)
+        }
+        if (mes == "junio" && monto.year == año) {
+            month.push(monthAmmountsJunio)
+        }
+        if (mes == "julio" && monto.year == año) {
+            month.push(monthAmmountsJulio)
+        }
+        if (mes == "agosto" && monto.year == año) {
+            month.push(monthAmmountsAgosto)
+        }
+        if (mes == "septiembre" && monto.year == año) {
+            month.push(monthAmmountsSeptiembre)
+        }
+        if (mes == "octubre" && monto.year == año) {
+            month.push(monthAmmountsOctubre)
+        }
+        if (mes == "noviembre" && monto.year == año) {
+            month.push(monthAmmountsNoviembre)
+        }
+        if (mes == "diciembre" && monto.year == año) {
+            month.push(monthAmmountsDiciembre)
+        }
+    }
+
     return (
         <div className="my-5 container">
             <div className="my-3 row justify-content-between px-3 form-group">
                 <h2>Panel Administrador</h2>
                 <select className="custom-select col-12 col-md-4" as="select" onChange={e => tablasChange && e.target.value === 'false' ? setTablasChange(!tablasChange) : setTablasChange(true)}>
-                    <option selected disabled defaultValue={0}>Cambiar de Tabla</option>
+                    <option value={true}>Ventas</option>
                     <option value={false}>Vendedores</option>
-                    <option>Ventas</option>
                 </select>
             </div>
             <div className="row justify-content-between px-3 my-3">
@@ -333,19 +385,19 @@ export default function Panel() {
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap px-1">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortDiaS}>Email</p>
+                                                <p className="mb-0" onClick={sortEmails}>Email</p>
                                                 <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="email" placeholder='Email...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap text-center">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortDiaS}>N° Celular</p>
+                                                <p className="mb-0">N° Celular</p>
                                                 <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="celphone" placeholder='N° Celular...' />
                                             </div>
                                         </th>
                                         <th className="py-0 position-sticky text-nowrap text-center">
                                             <div className="row justify-content-center mx-0 input-group-sm pb-2">
-                                                <p className="mb-0" onClick={sortDiaS}>Domicilio</p>
+                                                <p className="mb-0">Domicilio</p>
                                                 <input className="form-control" onChange={parameterSellerHandler} onKeyUp={enterSearch} name="address" placeholder='Domicilio...' />
                                             </div>
                                         </th>
@@ -375,6 +427,10 @@ export default function Panel() {
                 </table>
             </div>
             <Pagination datosRowsSales={datosRowsSales} datosRowsSellers={datosRowsSellers} datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
+            <div className="mt-4">
+                <p>Suma Total Anual: <strong>{ new Intl.NumberFormat('es-AR', {currency: 'ARS', style: 'currency'}).format(annual.reduce((a, b) => a + b, 0))}</strong></p>
+                <p>Suma Total Mensual: <strong>{new Intl.NumberFormat('es-AR', {currency: 'ARS', style: 'currency'}).format(month.reduce((a, b) => a + b, 0))}</strong></p>
+            </div>
         </div>
     );
 }

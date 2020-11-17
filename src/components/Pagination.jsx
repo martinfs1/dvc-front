@@ -65,7 +65,7 @@ function Paginator({ datosRowsSales, datosRowsSellers, montosTotalesShow, datosS
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-                <option value={datosRowsSales.totalDocs}>Todo</option>
+                <option value={tablasChange ? datosRowsSales.totalDocs : datosShow.totalDocs}>Todo</option>
             </select>
             <nav aria-label="...">
                 <ul className="pagination pagination-sm">
