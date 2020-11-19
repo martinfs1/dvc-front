@@ -30,7 +30,8 @@ clienteAxios.interceptors.response.use(
       })
     }
     return Promise.reject(error);
-  });
+  }
+);
 
 const rootElement = document.getElementById("root");
 
