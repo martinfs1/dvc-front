@@ -11,8 +11,6 @@ const AdminSaleModal = ({ datos, getDatos }) => {
     const cerrarModal = React.useRef();
     const resetForm = React.useRef();
 
-    console.log();
-
     const optionsNameSellers = () => {
         let opciones = dataName.map(o => <option key={o._id} value={o.fullname}>{o.fullname}</option>)
         setOptions(opciones)

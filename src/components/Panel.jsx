@@ -52,7 +52,6 @@ export default function Panel() {
                     ...paramsSales
                 }
             })
-
             setMontosTotales(amountTotals.data);
             setMontosTotalesShow(amountTotals.data);
 

@@ -1,8 +1,8 @@
 {
-  "name": "delvallecredito",
+  "name": "dvc-front",
   "version": "0.1.0",
-  "private": false,
-  "homepage": "https://marcobaiad.github.io/dvcs",
+  "private": true,
+  "homepage": "http://martinfs1.github.io/dvc-front",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
