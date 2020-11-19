@@ -19,8 +19,16 @@ const SellerModal = ({ getDatos }) => {
   console.log(sellerForm);
 
   const crearNuevaVenta = async (e) => {
-
     e.preventDefault();
+    if (pdf.type !== "application/pdf") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Solo se admite archivos formato PDF',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      return
+    }
     try {
 
       const NewSales = await clienteAxios.post('api/v1/regsales', sellerForm)

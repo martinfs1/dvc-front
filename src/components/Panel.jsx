@@ -52,6 +52,7 @@ export default function Panel() {
                     ...paramsSales
                 }
             })
+
             setMontosTotales(amountTotals.data);
             setMontosTotalesShow(amountTotals.data);
 
@@ -164,15 +165,15 @@ export default function Panel() {
     }
 
     const handlePaginateNext = (n) => {
-        tablasChange ? datosRowsSales.hasNextPage && setPage(n) 
-        :
-        datosRowsSellers.hasNextPage && setPage(n);
+        tablasChange ? datosRowsSales.hasNextPage && setPage(n)
+            :
+            datosRowsSellers.hasNextPage && setPage(n);
     }
 
     const handlePaginatePrev = (n) => {
-        tablasChange ? datosRowsSales.hasPrevPage && setPage(n) 
-        :
-        datosRowsSellers.hasPrevPage && setPage(n);
+        tablasChange ? datosRowsSales.hasPrevPage && setPage(n)
+            :
+            datosRowsSellers.hasPrevPage && setPage(n);
     }
 
     const handleChangeRows = (n) => {
@@ -220,9 +221,9 @@ export default function Panel() {
     const deleteSaleHandler = async (props) => {
         try {
             tablasChange ?
-            await clienteAxios.put(`api/v1/salesupdate/${props._id}`, {enable: props.enable === "SI" ? "NO" : "SI"})
-            :
-            await clienteAxios.put(`api/v1/sellerupdate/${props._id}`, {enable: props.enable === "SI" ? "NO" : "SI"})
+                await clienteAxios.put(`api/v1/salesupdate/${props._id}`, { enable: props.enable === "SI" ? "NO" : "SI" })
+                :
+                await clienteAxios.put(`api/v1/sellerupdate/${props._id}`, { enable: props.enable === "SI" ? "NO" : "SI" })
         } catch (error) {
             const { response } = error;
             console.log(response);
@@ -231,10 +232,10 @@ export default function Panel() {
 
     const annual = []
     const month = []
-    
+
     const mes = new Date().toLocaleString('default', { month: 'long' })
     const año = new Date().toLocaleString('default', { year: 'numeric' })
-    
+
 
     for (let monto of montosTotales) {
         const annualsAmmounts = monto.annualAmountApproved;
@@ -290,6 +291,8 @@ export default function Panel() {
             month.push(monthAmmountsDiciembre)
         }
     }
+
+    console.log();
 
     return (
         <div className="my-5 container">
@@ -428,8 +431,10 @@ export default function Panel() {
             </div>
             <Pagination datosRowsSales={datosRowsSales} datosRowsSellers={datosRowsSellers} datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} handlePaginate={handlePaginate} handlePaginateNext={handlePaginateNext} handlePaginatePrev={handlePaginatePrev} page={page} handleChangeRows={handleChangeRows} />
             <div className="mt-4">
-                <p>Suma Total Anual: <strong>{ new Intl.NumberFormat('es-AR', {currency: 'ARS', style: 'currency'}).format(annual.reduce((a, b) => a + b, 0))}</strong></p>
-                <p>Suma Total Mensual: <strong>{new Intl.NumberFormat('es-AR', {currency: 'ARS', style: 'currency'}).format(month.reduce((a, b) => a + b, 0))}</strong></p>
+                <p className="mb-0">Total Ventas {mes}: {month.length}</p>
+                <p className="mb-0">Monto ventas {mes}: <strong>{new Intl.NumberFormat('es-AR', { currency: 'ARS', style: 'currency' }).format(month.reduce((a, b) => a + b, 0))}</strong></p>
+                <p className="mb-0">Promedio ventas {mes}: <strong>{new Intl.NumberFormat('es-AR', { currency: 'ARS', style: 'currency' }).format(month.reduce((a, b) => a + b, 0)/month.length)}</strong></p>
+                <p className="mb-0">Suma Total Anual: <strong>{new Intl.NumberFormat('es-AR', { currency: 'ARS', style: 'currency' }).format(annual.reduce((a, b) => a + b, 0))}</strong></p>
             </div>
         </div>
     );

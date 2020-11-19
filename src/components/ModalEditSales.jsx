@@ -5,8 +5,6 @@ import Swal from 'sweetalert2';
 
 export default function RegSeller({ datos, onChangeHandler, tablasChange, getDatos }) {
 
-    console.log(datos);
-
     const btnCerrar = React.useRef(null);
 
     const alertEdit = async (req, res) => {
@@ -25,7 +23,6 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
                 })
                 editVentasHandler();
                 btnCerrar.current.click();
-                getDatos()
             } else if (result.isDenied) {
                 Swal.fire({
                     title: 'Cambios Descartados!',
@@ -40,10 +37,10 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
     const editVentasHandler = async () => {
         try {
             tablasChange ?
-            await clienteAxios.put(`api/v1/salesupdate/${datos._id}`, datos)
-            :
-            await clienteAxios.put(`api/v1/sellerupdate/${datos._id}`, datos)
-
+                await clienteAxios.put(`api/v1/salesupdate/${datos._id}`, datos)
+                :
+                await clienteAxios.put(`api/v1/sellerupdate/${datos._id}`, datos)
+            getDatos();
         } catch (error) {
             console.log(error);
         }
@@ -87,18 +84,18 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
                                             </div>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="monto">Monto Crédito</label>
-                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
+                                                    <label htmlFor="montoC">Monto Crédito</label>
+                                                    <input type="text" id="montoC" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
                                                 </div>
                                                 <div className="col text-center">
                                                     <label htmlFor="mcuotas">Numero cuotas</label>
                                                     <input type="text" id="mcuotas" className="form-control text-center" placeholder="Monto de Cuotas" name="feeAmount" onChange={onChangeHandler} value={datos.feeAmount} />
                                                 </div>
                                             </div>
-                                            <div className="form-group row">
+                                            <div className="form-group row" style={{width: "93%"}}>
                                                 <div className="col text-center">
                                                     <label htmlFor="monto">Monto Cuota</label>
-                                                    <input type="text" id="quotaAmount" className="form-control text-center" placeholder="Número de Teléfono" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
+                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
                                                 </div>
                                                 <div className="col text-center">
                                                     <label htmlFor="enable">Habilitado</label>
@@ -117,57 +114,42 @@ export default function RegSeller({ datos, onChangeHandler, tablasChange, getDat
                                         <>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="nombrefull">Nombre</label>
-                                                    <input type="text" id="fullname" className="form-control text-center" placeholder="Nombre Completo" name="nameClient" onChange={onChangeHandler} value={datos.fullname} />
+                                                    <label htmlFor="fullname">Nombre</label>
+                                                    <input type="text" id="fullname" className="form-control text-center" placeholder="Nombre Completo" name="fullname" onChange={onChangeHandler} value={datos.fullname} />
                                                 </div>
                                                 <div className="col text-center">
-                                                    <label htmlFor="number">DNI</label>
-                                                    <input type="text" id="number" className="form-control text-center" placeholder="Número de Teléfono" name="dni" onChange={onChangeHandler} value={datos.dni} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group row">
-                                                <div className="col text-center">
-                                                    <label htmlFor="dia">Teléfono</label>
-                                                    <input type="text" id="dia" className="form-control text-center" placeholder="Día" name="celphone" onChange={onChangeHandler} value={datos.celphone} />
-                                                </div>
-                                                <div className="col text-center">
-                                                    <label htmlFor="cuotas">Dirección</label>
-                                                    <input type="text" id="cuotas" className="form-control text-center" placeholder="Número de Cuotas" name="creditLine" onChange={onChangeHandler} value={datos.address} />
+                                                    <label htmlFor="dni">DNI</label>
+                                                    <input type="text" maxLength="8" minLength="7" id="dni" className="form-control text-center" placeholder="Número de Teléfono" name="dni" onChange={onChangeHandler} value={datos.dni} />
                                                 </div>
                                             </div>
                                             <div className="form-group row">
                                                 <div className="col text-center">
-                                                    <label htmlFor="monto">Monto Crédito</label>
-                                                    <input type="text" id="monto" className="form-control text-center" placeholder="Número de Teléfono" name="amountApproved" onChange={onChangeHandler} value={datos.amountApproved} />
+                                                    <label htmlFor="email">Email</label>
+                                                    <input type="text" id="email" className="form-control text-center" placeholder="Día" name="email" onChange={onChangeHandler} value={datos.email} />
                                                 </div>
                                                 <div className="col text-center">
-                                                    <label htmlFor="mcuotas">Numero cuotas</label>
-                                                    <input type="text" id="mcuotas" className="form-control text-center" placeholder="Monto de Cuotas" name="feeAmount" onChange={onChangeHandler} value={datos.feeAmount} />
+                                                    <label htmlFor="celphone">Teléfono</label>
+                                                    <input type="text" id="celphone" className="form-control text-center" placeholder="Día" name="celphone" onChange={onChangeHandler} value={datos.celphone} />
                                                 </div>
                                             </div>
-                                            <div className="form-group row">
+                                            <div className="form-group row" style={{width: "93%"}}>
                                                 <div className="col text-center">
-                                                    <label htmlFor="monto">Monto Cuota</label>
-                                                    <input type="text" id="quotaAmount" className="form-control text-center" placeholder="Número de Teléfono" name="quotaAmount" onChange={onChangeHandler} value={datos.quotaAmount} />
+                                                    <label htmlFor="address">Dirección</label>
+                                                    <input type="text" id="address" className="form-control text-center" placeholder="Dirección" name="address" onChange={onChangeHandler} value={datos.address} />
                                                 </div>
                                                 <div className="col text-center">
                                                     <label htmlFor="enable">Habilitado</label>
-                                                    <select className="custom-select" as="select" name="enable" onChange={onChangeHandler}>
+                                                    <select className="form-control" as="select" name="enable" onChange={onChangeHandler}>
                                                         <option value="SI" selected={datos.enable == 'SI'}>SI</option>
                                                         <option value="NO">NO</option>
                                                     </select>
                                                 </div>
-                                            </div>
-                                            <div className="col-12 text-center">
-                                                <label htmlFor="saleDetail">Observación</label>
-                                                <textarea rows="1" type="text" id="saleDetail" className="form-control text-center" placeholder={`${datos.saleDetail ? 'Cambiar Observación' : 'No existe observación'}`} name="saleDetail" onChange={onChangeHandler} value={datos.saleDetail} />
                                             </div>
                                         </>
                                 }
                             </form>
                         </div>
                         <div className="modal-footer">
-                            {/* <button type="button" className="btn btn-secondary" data-dismiss="modal"></button> */}
                             <button type="button" className="btn btn-primary" onClick={alertEdit}>Guardar</button>
                         </div>
                     </div>

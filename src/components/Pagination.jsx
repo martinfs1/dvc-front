@@ -56,18 +56,15 @@ function Paginator({ datosRowsSales, datosRowsSellers, montosTotalesShow, datosS
         setArrOfCurrButtons(tempNumberOfPagesSellers)
     }, [currentPage, paginas])
 
-    console.log(datosRowsSellers.hasPrevPage);
-    console.log(datosRowsSellers.prevPage);
-
     return (
-        <div className="row mx-0 justify-content-around flex-nowrap">
-            <select onChange={(e) => setChangeN(parseInt(e.target.value))} className="custom-select-sm">
+        <div className="row mx-0 justify-content-around">
+            <select onChange={(e) => setChangeN(parseInt(e.target.value))} className="custom-select-sm order-2">
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
                 <option value={tablasChange ? datosRowsSales.totalDocs : datosShow.totalDocs}>Todo</option>
             </select>
-            <nav aria-label="...">
+            <nav aria-label="..." className="order-1">
                 <ul className="pagination pagination-sm">
                     <li>
                         <span onClick={() => page == 1 ? '' : handlePaginate(1)} role="button" tabIndex="0" className="page-link">&le;&le;</span>
@@ -78,9 +75,8 @@ function Paginator({ datosRowsSales, datosRowsSellers, montosTotalesShow, datosS
                     {   
                         arrOfCurrButtons.map(p => {
                             return (
-                                <li className={`page-item ${currentPage == p && 'active'}`}>
+                                <li className={`page-item ${currentPage == p && 'active'}`} key={p}>
                                     <span onClick={() => handlePaginate(p)}
-                                        key={p}
                                         role="button"
                                         tabIndex="0"
                                         className="page-link">
@@ -98,7 +94,7 @@ function Paginator({ datosRowsSales, datosRowsSellers, montosTotalesShow, datosS
                     </li>
                 </ul>
             </nav>
-            <div>
+            <div className="order-3 order-md-3">
                 <Download datosShow={datosShow} montosTotalesShow={montosTotalesShow} tablasChange={tablasChange} />
             </div>
         </div>

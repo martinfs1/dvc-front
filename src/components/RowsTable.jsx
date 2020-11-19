@@ -77,8 +77,8 @@ function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerSh
                             <td className="py-1 text-nowrap" colSpan="3">{f.fullname}</td>
                             <td className="py-1 text-nowrap">{f.creditLine}</td>
                             <td className="py-1 text-nowrap">${f.amountApproved}</td>
-                            <td className="py-1 text-nowrap text-center">${f.quotaAmount}</td>
-                            <td className="py-1 text-nowrap text-center">{f.feeAmount}</td>
+                            <td className="py-1 text-nowrap text-center">${f.feeAmount}</td>
+                            <td className="py-1 text-nowrap text-center">{f.quotaAmount}</td>
                             <td className="py-1 text-nowrap text-center">{f.enable}</td>
                             <td className="py-1 text-nowrap text-center">{f.saleDetail ? <button className="btn btn-primary py-0" onClick={() => handlerObs(f.saleDetail)} data-toggle="modal" data-target="#modalObservacion">Ver</button> : "-"}</td>
                             <td className="py-1 text-nowrap"><a data-toggle="modal" data-target="#exampleModal"><i className="fas fa-edit text-primary mx-1" role="button" tabIndex="0" onClick={() => onClickHandler(f)}></i></a>{f.enable == "SI" ? <i role="button" tabIndex="0" className="far fa-trash-alt text-danger mx-1" onClick={() => alertDelete(f)}></i> : <i class="fas fa-check text-success" onClick={() => alertEnable(f)}></i>}</td>
@@ -106,7 +106,7 @@ function RowsTable({ datosShow, onClickHandler, deleteSaleHandler, datosSellerSh
                             </button>
                         </div>
                         <div className="modal-body">
-                            {obs}
+                            <p className="text-break mb-0">{obs}</p>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>

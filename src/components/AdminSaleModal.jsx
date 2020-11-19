@@ -11,6 +11,8 @@ const AdminSaleModal = ({ datos, getDatos }) => {
     const cerrarModal = React.useRef();
     const resetForm = React.useRef();
 
+    console.log();
+
     const optionsNameSellers = () => {
         let opciones = dataName.map(o => <option key={o._id} value={o.fullname}>{o.fullname}</option>)
         setOptions(opciones)
@@ -34,12 +36,21 @@ const AdminSaleModal = ({ datos, getDatos }) => {
 
     const crearNuevaVenta = async (e) => {
         e.preventDefault();
+        if (pdf.type !== "application/pdf") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Solo se admite archivos formato PDF',
+                showConfirmButton: false,
+                timer: 1500
+            })  
+            return
+        }
         try {
 
             const NewSales = await clienteAxios.post('api/v1/regsales', sellerForm)
             console.log('newsales ->', NewSales.data.id)
             const formData = new FormData()
-            formData.append('myFile', pdf)
+            formData.append('myFile', pdf) 
             await clienteAxios.post(`api/v1/regsales/${NewSales.data.id}/sendpdf`, formData, {
                 headers: {
                     'content-type': 'multipart/form-data'
@@ -53,9 +64,7 @@ const AdminSaleModal = ({ datos, getDatos }) => {
             });
             resetForm.current.reset();
             cerrarModal.current.click();
-            getDatos()
-
-
+            getDatos();
         } catch (error) {
             console.log(error);
         }
@@ -89,8 +98,6 @@ const AdminSaleModal = ({ datos, getDatos }) => {
             return false
         }
     }
-
-    console.log(sellerForm);
 
     return (
         <>
@@ -196,7 +203,7 @@ const AdminSaleModal = ({ datos, getDatos }) => {
                                 <div className="form-row">
                                     <div className="form-group col-sm-6">
                                         <label htmlFor="inputStateCantidadCuotas">Cantidad de Cuotas *</label>
-                                        <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="feeAmount">
+                                        <select id="inputStateCantidadCuotas" className="form-control" onChange={actualizarState} name="quotaAmount">
                                             <option value={0}>Elegir...</option>
                                             <option value={1}>0</option>
                                             <option value={3}>3</option>
@@ -212,7 +219,7 @@ const AdminSaleModal = ({ datos, getDatos }) => {
                                         <label htmlFor="montoPorCuota">Monto por cuota *</label>
                                         <input className="form-control"
                                             id="montoPorCuota"
-                                            name="quotaAmount"
+                                            name="feeAmount"
                                             type="text"
                                             onKeyPress={OnlyNumber}
                                             onChange={actualizarState}
